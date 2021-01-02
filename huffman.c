@@ -23,8 +23,12 @@ typedef struct min_heap {
  * fix output
  * write function to find height of huffman tree
  * fix the free-ing (free the min heap container and the tree)
+ * add code to find the average length of the huffman code
  * make an API to make working with essential functions easier for items below
  * think of a data structure to hold the codes
+ * use a hashtable to store the letters along with their frequencies b/c
+ * 			- I can then delete the letter field in the node (no need for internal node marker)
+ * 			- wouldn't work if there were duplicate frequencies however
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
 */
