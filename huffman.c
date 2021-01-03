@@ -14,7 +14,6 @@ typedef struct min_heap {
 } Min_Heap;
 
 /* TO-DO
- * add code to find the average length of the huffman code
  * create a header and c file for the min heap
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
@@ -252,6 +251,29 @@ unsigned int get_huff_tree_height(Heap_Node *root){
 	}
 }
 
+int code_exists(Code_Word codeword){
+	return codeword.n_bits != 0;
+}
+
+float find_avg_len(Code_Word *codewords){
+	unsigned i, num_sum, denom;
+	float avg_len;
+
+	avg_len = num_sum = denom = 0;
+
+	//find the number of characters
+	for (i = 0; i < N_CHARS; i++)
+		if (code_exists(codewords[i])){
+			num_sum += codewords[i].n_bits;
+			denom++;
+		}
+	
+	if (denom == 0)
+		return avg_len;
+	else
+		return (num_sum) / denom;
+}
+
 Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_flag){
 	int *bit_buffer, b_index;
 	Code_Word *codewords;
@@ -271,9 +293,11 @@ Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_fla
 	//fill in the array of code word structs
 	assign_codes(huff_tree, bit_buffer, b_index, codewords, p_flag);
 	
-	//print the array of code words if appropriate
-	if (p_flag)
+	//print the array of code words and their average length if appropriate
+	if (p_flag){
 		print_decimal_codes(codewords);
+		printf("The average length = %.2f bits\n", find_avg_len(codewords));
+	}
 
 	//free the buffer used to store bits
 	free(bit_buffer);
