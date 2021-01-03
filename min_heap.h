@@ -15,13 +15,20 @@ typedef struct min_heap {
 	Heap_Node **array;
 } Min_Heap;
 
+/*
+ * For the comparator parameter, int return value as signified:
+ * 	  - (< 0) means that the first parameter is less than the second parameter
+ *    - (= 0) means that the first parameter is equal to the second parameter
+ * 	  - (> 0) means that the first parameter is greater than the second parameter
+ * */
+
 Min_Heap *create_heap(unsigned int capacity);
 
-void build_heap(Min_Heap *min_heap);
+void build_heap(Min_Heap *min_heap, int (*compar)(const void*, const void*));
 
 Heap_Node *create_new_node(char letter, unsigned int freq);
 
-Heap_Node *extract_min(Min_Heap *min_heap);
+Heap_Node *extract_min(Min_Heap *min_heap, int (*compar)(const void*, const void*));
 
 void insert_new_node(Min_Heap *min_heap, Heap_Node *new_node);
 

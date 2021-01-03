@@ -16,6 +16,10 @@
  * add bit fields
 */
 
+//comparator function to be used for heap creation and extraction
+int comparator(const void *node1, const void *node2){
+	return (((Heap_Node*)node1)->freq - ((Heap_Node*)node2)->freq);
+}
 //=============================================================
 Heap_Node *extract_huff_tree(Min_Heap *min_heap){
 	if (min_heap->size != 1)
@@ -44,7 +48,7 @@ Min_Heap *create_and_build_heap(unsigned *freq_table){
 			min_heap->array[i++] = create_new_node(f, freq_table[f]);
 	
 	min_heap->size = n_used_chars;
-	build_heap(min_heap);
+	build_heap(min_heap, comparator);
 
 	return min_heap;
 }
@@ -58,8 +62,8 @@ Heap_Node *build_huffman_tree(unsigned *freq_table){
 		return NULL;
 
 	while (!has_one_element(min_heap)){
-		left_node = extract_min(min_heap);
-		right_node = extract_min(min_heap);
+		left_node  = extract_min(min_heap, comparator);
+		right_node = extract_min(min_heap, comparator);
 
 		combined_freq = left_node->freq + right_node->freq;
 		top_node = create_new_node(INTERNAL_NODE_MARKER, combined_freq);
@@ -75,7 +79,7 @@ Heap_Node *build_huffman_tree(unsigned *freq_table){
 	return root_node;
 }
 
-void print_arr(int *arr, int n) { 
+void print_arr(int *arr, int n){ 
     int i; 
 
     for (i = 0; i < n; ++i) 

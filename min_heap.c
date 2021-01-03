@@ -36,22 +36,22 @@ void swap_heap_nodes(Heap_Node **n1, Heap_Node **n2){
 	*n2 = temp_node;
 }
 
-void heapify(Min_Heap *min_heap, unsigned int index){
+void heapify(Min_Heap *min_heap, unsigned index, int (*compar)(const void*, const void*)){
 	unsigned int smallest, left, right;
 	
 	smallest = index;
 	left  = 2 * index + 1;
 	right = 2 * index + 2;
-
-	if (left < min_heap->size && min_heap->array[left]->freq < min_heap->array[smallest]->freq)
+	
+	if (left < min_heap->size && compar(min_heap->array[left], min_heap->array[smallest]) < 0)
 		smallest = left;
 	
-	if (right < min_heap->size && min_heap->array[right]->freq < min_heap->array[smallest]->freq)
+	if (right < min_heap->size && compar(min_heap->array[right], min_heap->array[smallest]) < 0)
 		smallest = right;
 	
 	if (smallest != index){
 		swap_heap_nodes(&min_heap->array[smallest], &min_heap->array[index]);
-		heapify(min_heap, smallest);
+		heapify(min_heap, smallest, compar);
 	}
 }
 
@@ -59,13 +59,13 @@ int has_one_element(Min_Heap *min_heap){
 	return min_heap->size == 1;
 }
 
-Heap_Node *extract_min(Min_Heap *min_heap){
+Heap_Node *extract_min(Min_Heap *min_heap, int (*compar)(const void*, const void*)){
 	Heap_Node *min_node;
 
 	min_node = min_heap->array[0];								//pop off the root
 	min_heap->array[0] = min_heap->array[min_heap->size - 1];	//insert (large) leaf as root
 	min_heap->size--;											//decrease heap size
-	heapify(min_heap, 0);										//ripple the new root down
+	heapify(min_heap, 0, compar);							    //ripple the new root down
 
 	return min_node;
 }
@@ -88,14 +88,14 @@ int is_leaf(Heap_Node *node){
 	return !(node->left) && !(node->right);
 }
 	
-void build_heap(Min_Heap *min_heap){
+void build_heap(Min_Heap *min_heap, int (*compar)(const void*, const void*)){
 	int i, n;
 
 	n = min_heap->size - 1;
 	i = (n - 1) /2;
 
 	while (i >= 0){
-		heapify(min_heap, i);
+		heapify(min_heap, i, compar);
 		i--;
 	}
 }
