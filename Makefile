@@ -1,11 +1,13 @@
 CC = gcc
 CFLAGS = -std=c99 -pedantic -Wall 
+DEPS = huffman.h min_heap.h
+OBJ = compress.o huffman.o min_heap.o
 
-compress: compress.o huffman.o
-	$(CC) $(CFLAGS) -o compress compress.o huffman.o
+%.o: %.c $(DEPS)
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-compress.o: huffman.h
-huffman.o: huffman.h min_heap.h
+compress: $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
 	rm -f compress *.o
