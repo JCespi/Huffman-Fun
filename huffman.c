@@ -15,6 +15,8 @@ typedef struct min_heap {
 
 /* TO-DO
  * create a header and c file for the min heap
+ * add code to find the entropy of the huffman code
+ * write a commandline parser for compress
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
  * check for memory leaks by compiling on the zoo
