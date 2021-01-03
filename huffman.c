@@ -1,16 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "huffman.h"
 
 #define INTERNAL_NODE_MARKER '$'
 #define ZERO_BIT 0
 #define ONE_BIT  1
-
-typedef struct min_heap_node {
-	char letter;
-	unsigned int freq;
-	struct min_heap_node *left;
-	struct min_heap_node *right;
-} Heap_Node;
 
 typedef struct min_heap {
 	unsigned int size;
@@ -20,7 +14,6 @@ typedef struct min_heap {
 
 /* TO-DO
  * add code to find the average length of the huffman code
- * make an API to make working with essential functions easier for items below
  * think of a data structure to hold the codes
  * use a hashtable to store the letters along with their frequencies b/c
  * 			- I can then delete the letter field in the node (no need for internal node marker)
