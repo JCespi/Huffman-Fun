@@ -19,9 +19,7 @@ typedef struct min_heap {
 } Min_Heap;
 
 /* TO-DO
- * understand the code and the algorithm
  * fix output
- * write function to find height of huffman tree
  * add code to find the average length of the huffman code
  * make an API to make working with essential functions easier for items below
  * think of a data structure to hold the codes
@@ -207,7 +205,19 @@ void print_codes(Heap_Node *root, int *buffer, int b_index){
 }
 
 unsigned int get_huff_tree_height(Heap_Node *root){
-	return 100;
+	unsigned int l_subtree_h, r_subtree_h;
+
+	if (root == NULL)
+		return 0;
+	else {
+		l_subtree_h = get_huff_tree_height(root->left);
+		r_subtree_h = get_huff_tree_height(root->right);
+
+		if (l_subtree_h > r_subtree_h)
+			return l_subtree_h + 1;
+		else
+			return r_subtree_h + 1;
+	}
 }
 
 Heap_Node *create_huffman_code(char *letters, unsigned int *freqs, int n){
