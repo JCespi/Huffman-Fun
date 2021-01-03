@@ -19,6 +19,11 @@ typedef struct min_heap {
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
  * check for memory leaks by compiling on the zoo
+ * INTERESTING observation:
+ * 			- for codewords that begin with 0's, the codewords will be different,
+ * 			  but when converting to decimal there can be duplicates by
+ * 			  nature of converting numbers (e.g. 010 (2)== 00010 (2) == 2 (10))
+ * 			- I might actually have to store a sequence of bits :0
 */
 
 //====================Heap Functions===========================
@@ -242,8 +247,10 @@ Heap_Node *create_huffman_code(char *letters, unsigned *freqs, int n, int p_flag
 
 	assign_codes(root, buffer, b_index, codewords, p_flag);
 
-	for (int i='a'; i < 'a' + n; i++)
-		printf("Letter: %c, Codeword: %d\n", i, codewords[i]);
+	for (int i=0; i < N_CHARS; i++)
+		if (codewords[i])
+			printf("Letter: %c, Codeword: %d\n", i, codewords[i]);
+	
 
 	free(codewords);	//make sure to return in some form instead
 	free(buffer);
