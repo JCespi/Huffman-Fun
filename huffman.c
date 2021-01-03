@@ -26,6 +26,8 @@ typedef struct min_heap {
  * use a hashtable to store the letters along with their frequencies b/c
  * 			- I can then delete the letter field in the node (no need for internal node marker)
  * 			- wouldn't work if there were duplicate frequencies however
+ * 				- but as long as each letter gets a code, it shouldn't matter b/c
+ * 				  that letter will still get a code
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
 */
