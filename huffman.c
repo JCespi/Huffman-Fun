@@ -26,6 +26,9 @@ typedef struct min_heap {
 Min_Heap *create_heap(unsigned int capacity){
 	Min_Heap *min_heap;
 
+	if (capacity == 0)
+		return NULL;
+
 	min_heap = malloc(sizeof(Min_Heap));
 	min_heap->size = 0;
 	min_heap->capacity = capacity;
@@ -139,8 +142,10 @@ Min_Heap *create_and_build_heap(unsigned *freq_table){
 	for (i=0; i < n_used_chars; i++)
 		if (freq_table[i])
 			n_used_chars++;
+	printf("number of used chars: %d\n", n_used_chars);
 
-	min_heap = create_heap(n_used_chars);
+	if ((min_heap = create_heap(n_used_chars)) == NULL)
+		return NULL;
 
 	//iterate through entire freq table, but only add used chars to heap
 	for (i = 0; i < N_CHARS; i++)
@@ -158,7 +163,8 @@ Heap_Node *build_huffman_tree(unsigned *freq_table){
 	Min_Heap *min_heap;
 	unsigned int combined_freq;
 
-	min_heap = create_and_build_heap(freq_table);
+	if ((min_heap = create_and_build_heap(freq_table)) == NULL)
+		return NULL;
 
 	while (!has_one_element(min_heap)){
 		left_node = extract_min(min_heap);
@@ -253,7 +259,9 @@ Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_fla
 	Heap_Node *huff_tree;
 
 	//generate the huffman tree and save its root to argument
-	huff_tree = build_huffman_tree(freq_table);
+	if ((huff_tree = build_huffman_tree(freq_table)) == NULL)
+		return NULL;
+		
 	*root = huff_tree;
 
 	//initialize the bit buffer and the array of code word structs
