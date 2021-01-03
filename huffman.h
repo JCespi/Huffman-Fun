@@ -17,7 +17,7 @@ typedef struct code_word {
 } Code_Word;
 
 //fills in root argument and returns array of codewords
-Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int n, int p_flag);
+Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_flag);
 
 //frees the huffman tree
 void free_huffman_tree(Heap_Node *root);

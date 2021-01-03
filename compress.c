@@ -24,7 +24,7 @@ int main(int argc, char **argv){
     unsigned *freq_table;
 
     freq_table = create_freq_table();
-    codewords = create_huffman_code(&root, freq_table, N_CHARS, 1);
+    codewords = create_huffman_code(&root, freq_table, 1);
 
     free_huffman_tree(root);
 	free(codewords);

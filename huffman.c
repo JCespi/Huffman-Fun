@@ -15,8 +15,6 @@ typedef struct min_heap {
 
 /* TO-DO
  * add code to find the average length of the huffman code
- * use a hashtable to store the letters along with their frequencies
- * 		- create_huffman_code() should take in a 256 element array of frequencies
  * create a header and c file for the min heap
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
@@ -131,27 +129,36 @@ Heap_Node *extract_huff_tree(Min_Heap *min_heap){
 	return min_heap->array[0];
 }
 
-Min_Heap *create_and_build_heap(char *letters, unsigned int *freqs, int n){
+Min_Heap *create_and_build_heap(unsigned *freq_table){
 	Min_Heap *min_heap;
-	int i;
+	int i, n_used_chars;
 
-	min_heap = create_heap(n);
+	n_used_chars = 0;
 
-	for (i = 0; i < n; i++)
-		min_heap->array[i] = create_new_node(letters[i], freqs[i]);
+	//find the number of used characters to create approp. sized heap
+	for (i=0; i < n_used_chars; i++)
+		if (freq_table[i])
+			n_used_chars++;
+
+	min_heap = create_heap(n_used_chars);
+
+	//iterate through entire freq table, but only add used chars to heap
+	for (i = 0; i < N_CHARS; i++)
+		if (freq_table[i])
+			min_heap->array[i] = create_new_node(i, freq_table[i]);
 	
-	min_heap->size = n;
+	min_heap->size = n_used_chars;
 	build_heap(min_heap);
 
 	return min_heap;
 }
 
-Heap_Node *build_huffman_tree(char *letters, unsigned int *freqs, int n){
+Heap_Node *build_huffman_tree(unsigned *freq_table){
 	Heap_Node *left_node, *top_node, *right_node, *root_node;
 	Min_Heap *min_heap;
 	unsigned int combined_freq;
 
-	min_heap = create_and_build_heap(letters, freqs, n);
+	min_heap = create_and_build_heap(freq_table);
 
 	while (!has_one_element(min_heap)){
 		left_node = extract_min(min_heap);
@@ -240,13 +247,13 @@ unsigned int get_huff_tree_height(Heap_Node *root){
 	}
 }
 
-Code_Word *create_huffman_code(Heap_Node **root, char *letters, unsigned *freqs, int n, int p_flag){
+Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_flag){
 	int *bit_buffer, b_index;
 	Code_Word *codewords;
 	Heap_Node *huff_tree;
 
 	//generate the huffman tree and save its root to argument
-	huff_tree = build_huffman_tree(letters, freqs, n);
+	huff_tree = build_huffman_tree(freq_table);
 	*root = huff_tree;
 
 	//initialize the bit buffer and the array of code word structs
