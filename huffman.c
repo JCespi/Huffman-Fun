@@ -18,6 +18,7 @@ typedef struct min_heap {
  * add code to find the average length of the huffman code
  * use a hashtable to store the letters along with their frequencies
  * 		- create_huffman_code() should take in a 256 element array of frequencies
+ * create a header and c file for the min heap
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
  * check for memory leaks by compiling on the zoo
