@@ -17,6 +17,7 @@ typedef struct min_heap {
 /* TO-DO
  * add code to find the average length of the huffman code
  * use a hashtable to store the letters along with their frequencies
+ * 		- create_huffman_code() should take in a 256 element array of frequencies
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
  * check for memory leaks by compiling on the zoo
@@ -285,11 +286,10 @@ int main(int argc, char **argv){
 	Code_Word *codewords;
 
 	char arr[] = { 'a', 'b', 'c', 'd', 'e', 'f' }; 
-    unsigned int freq[] = { 5, 9, 12, 13, 16, 45 }; 
+    unsigned freq[] = { 5, 9, 12, 13, 16, 45 }; 
 	int size = 6;
 
-	codewords = create_huffman_code(&root, arr, freq, size, 0);
-	print_decimal_codes(codewords);
+	codewords = create_huffman_code(&root, arr, freq, size, 1);
 
 	free_huffman_tree(root);
 	free(codewords);
