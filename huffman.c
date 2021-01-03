@@ -7,11 +7,18 @@
 #define ZERO_BIT 0
 #define ONE_BIT  1
 
+//container for the minimum heap
 typedef struct min_heap {
 	unsigned int size;
 	unsigned int capacity;
 	Heap_Node **array;
 } Min_Heap;
+
+//contains the codeword (decimal) and the num of bits
+typedef struct code_word {
+	unsigned int code_d;
+	unsigned int n_bits;
+} Code_Word;
 
 /* TO-DO
  * add an array of structs with two int fields in order to transmit:
@@ -21,6 +28,7 @@ typedef struct min_heap {
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
  * check for memory leaks by compiling on the zoo
+ * add bit fields
 */
 
 //====================Heap Functions===========================
