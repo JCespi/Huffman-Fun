@@ -5,6 +5,8 @@ Plan thus far:
 	- ideas include:
 		- making a dictionary of size 256 (all chars)
 		  where the pairs are (char, frequency)
+		- a commandline parser for options such as
+		  -v for verbose (outputting average length)
 3. Figure out how best to encode the tree itself
 4. Code up Stan's code to output bits (modified of course)
 5. Write code to decode the huffman tree and accept bit stream.
