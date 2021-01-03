@@ -239,31 +239,31 @@ unsigned int get_huff_tree_height(Heap_Node *root){
 	}
 }
 
-//maybe I should return the array of codewords and transmit the tree initially
-Heap_Node *create_huffman_code(char *letters, unsigned *freqs, int n, int p_flag){
+Code_Word *create_huffman_code(Heap_Node **root, char *letters, unsigned *freqs, int n, int p_flag){
 	int *bit_buffer, b_index;
 	Code_Word *codewords;
-	Heap_Node *root;
+	Heap_Node *huff_tree;
 
-	//generate the huffman tree and save its root
-	root = build_huffman_tree(letters, freqs, n);
+	//generate the huffman tree and save its root to argument
+	huff_tree = build_huffman_tree(letters, freqs, n);
+	*root = huff_tree;
 
 	//initialize the bit buffer and the array of code word structs
-	bit_buffer = calloc(get_huff_tree_height(root), sizeof(int));
+	bit_buffer = calloc(get_huff_tree_height(huff_tree), sizeof(int));
 	codewords  = calloc(N_CHARS, sizeof(Code_Word));
 	b_index = 0;
 
 	//fill in the array of code word structs
-	assign_codes(root, bit_buffer, b_index, codewords, p_flag);
+	assign_codes(huff_tree, bit_buffer, b_index, codewords, p_flag);
 	
 	//print the array of code words if appropriate
 	if (p_flag)
 		print_decimal_codes(codewords);
 
-	free(codewords);	//make sure to return in some form instead
+	//free the buffer used to store bits
 	free(bit_buffer);
 
-	return root;
+	return codewords;
 }
 
 void free_huffman_tree(Heap_Node *root){
@@ -282,13 +282,17 @@ void free_huffman_tree(Heap_Node *root){
 //=============================================================
 int main(int argc, char **argv){
 	Heap_Node *root;
+	Code_Word *codewords;
 
 	char arr[] = { 'a', 'b', 'c', 'd', 'e', 'f' }; 
     unsigned int freq[] = { 5, 9, 12, 13, 16, 45 }; 
 	int size = 6;
 
-	root = create_huffman_code(arr, freq, size, 1);
+	codewords = create_huffman_code(&root, arr, freq, size, 0);
+	print_decimal_codes(codewords);
+
 	free_huffman_tree(root);
+	free(codewords);
 
 	return 0;
 }

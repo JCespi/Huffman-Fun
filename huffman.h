@@ -17,8 +17,8 @@ typedef struct code_word {
 //returns a huffman tree by using a priority queue
 Heap_Node *build_huffman_tree(char *letters, unsigned int *freqs, int n);
 
-//creates a huffman code, storing it in ______
-Heap_Node *create_huffman_code(char *letters, unsigned *freqs, int n, int p_flag);
+//fills in root argument and returns array of codewords
+Code_Word *create_huffman_code(Heap_Node **root, char *letters, unsigned *freqs, int n, int p_flag);
 
 //frees the huffman tree
 void free_huffman_tree(Heap_Node *root);
