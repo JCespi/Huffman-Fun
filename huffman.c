@@ -185,6 +185,12 @@ void print_arr(int *arr, int n) {
     printf("\n"); 
 }
 
+void print_decimal_codes(Code_Word *codewords){
+	for (int i=0; i < N_CHARS; i++)
+		if (codewords[i].n_bits)
+			printf("Letter: %c, Codeword: %d, bits: %d\n", i, codewords[i].code_d, codewords[i].n_bits);
+}
+
 //given an array representing a binary number, computes the decimal equivalent
 unsigned convert_bin_to_dec(int *bit_array, int last_index){
 	unsigned i, decimal_output, multiplier;
@@ -241,24 +247,27 @@ unsigned int get_huff_tree_height(Heap_Node *root){
 
 //maybe I should return the array of codewords and transmit the tree initially
 Heap_Node *create_huffman_code(char *letters, unsigned *freqs, int n, int p_flag){
-	int *buffer, b_index;
+	int *bit_buffer, b_index;
 	Code_Word *codewords;
 	Heap_Node *root;
 
+	//generate the huffman tree and save its root
 	root = build_huffman_tree(letters, freqs, n);
-	buffer = malloc(sizeof(int) * get_huff_tree_height(root));
-	codewords = calloc(N_CHARS, sizeof(Code_Word));
+
+	//initialize the bit buffer and the array of code word structs
+	bit_buffer = calloc(get_huff_tree_height(root), sizeof(int));
+	codewords  = calloc(N_CHARS, sizeof(Code_Word));
 	b_index = 0;
 
-	assign_codes(root, buffer, b_index, codewords, p_flag);
-
-	for (int i=0; i < N_CHARS; i++)
-		if (codewords[i].n_bits)
-			printf("Letter: %c, Codeword: %d, bits: %d\n", i, codewords[i].code_d, codewords[i].n_bits);
+	//fill in the array of code word structs
+	assign_codes(root, bit_buffer, b_index, codewords, p_flag);
 	
+	//print the array of code words if appropriate
+	if (p_flag)
+		print_decimal_codes(codewords);
 
 	free(codewords);	//make sure to return in some form instead
-	free(buffer);
+	free(bit_buffer);
 
 	return root;
 }
