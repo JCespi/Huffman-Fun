@@ -8,6 +8,12 @@ typedef struct min_heap_node {
 	struct min_heap_node *right;	//8  bytes
 } Heap_Node;						//25 bytes -> 21*N bytes total
 
+//contains the codeword (decimal) and the num of bits
+typedef struct code_word {
+	unsigned int code_d;		//codeword in decimal notation
+	unsigned int n_bits;		//num of bits and indicator of existence
+} Code_Word;
+
 //returns a huffman tree by using a priority queue
 Heap_Node *build_huffman_tree(char *letters, unsigned int *freqs, int n);
 

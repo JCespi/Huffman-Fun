@@ -14,12 +14,6 @@ typedef struct min_heap {
 	Heap_Node **array;
 } Min_Heap;
 
-//contains the codeword (decimal) and the num of bits
-typedef struct code_word {
-	unsigned int code_d;		//codeword in decimal notation
-	unsigned int n_bits;		//num of bits and indicator of existence
-} Code_Word;
-
 /* TO-DO
  * add code to find the average length of the huffman code
  * use a hashtable to store the letters along with their frequencies
