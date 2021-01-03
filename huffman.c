@@ -15,11 +15,7 @@ typedef struct min_heap {
 /* TO-DO
  * add code to find the average length of the huffman code
  * think of a data structure to hold the codes
- * use a hashtable to store the letters along with their frequencies b/c
- * 			- I can then delete the letter field in the node (no need for internal node marker)
- * 			- wouldn't work if there were duplicate frequencies however
- * 				- but as long as each letter gets a code, it shouldn't matter b/c
- * 				  that letter will still get a code
+ * use a hashtable to store the letters along with their frequencies
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
 */
