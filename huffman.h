@@ -2,7 +2,7 @@
 
 //a node in a huffman tree (N nodes total)
 typedef struct min_heap_node {
-	char letter;					//1  byte
+	unsigned int letter;		    //1  byte
 	unsigned int freq;				//4  bytes
 	struct min_heap_node *left;		//8  bytes
 	struct min_heap_node *right;	//8  bytes

@@ -3,6 +3,7 @@
 #include "huffman.h"
 
 #define INTERNAL_NODE_MARKER '$'
+#define N_CHARS 256
 #define ZERO_BIT 0
 #define ONE_BIT  1
 
@@ -14,7 +15,6 @@ typedef struct min_heap {
 
 /* TO-DO
  * add code to find the average length of the huffman code
- * think of a data structure to hold the codes
  * use a hashtable to store the letters along with their frequencies
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
@@ -167,30 +167,50 @@ Heap_Node *build_huffman_tree(char *letters, unsigned int *freqs, int n){
 	return root_node;
 }
 
-void print_arr(int *arr, int n) { 
+void print_arr(unsigned *arr, unsigned n) { 
     int i; 
 
     for (i = 0; i < n; ++i) 
         printf("%d", arr[i]); 
   
     printf("\n"); 
-} 
+}
 
-void assign_codes(Heap_Node *root, int *buffer, int b_index, int p_flag){
+//given an array representing a binary number, computes the decimal equivalent
+unsigned convert_bin_to_dec(unsigned *bit_array, unsigned last_index){
+	unsigned i, decimal_output, multiplier;
+
+
+	decimal_output = 0;			  //decimal number
+	multiplier = 1 << last_index; //2 ^ last_index
+
+	for (i=0; i < last_index; i++){
+		decimal_output += (bit_array[i]) ? multiplier : 0;
+		multiplier /= 2;
+	}
+	
+	return decimal_output;
+}
+
+void assign_codes(Heap_Node *root, unsigned *buffer, unsigned b_index, unsigned *codewords, int p_flag){
 
 	if (root->left){
 		buffer[b_index] = ZERO_BIT;
-		assign_codes(root->left, buffer, b_index + 1, p_flag);
+		assign_codes(root->left, buffer, b_index + 1, codewords, p_flag);
 	}
 
 	if (root->right){
 		buffer[b_index] = ONE_BIT;
-		assign_codes(root->right, buffer, b_index + 1, p_flag);
+		assign_codes(root->right, buffer, b_index + 1, codewords, p_flag);
 	}
 
-	if (p_flag && is_leaf(root)){
-		printf("%c: ", root->letter);
-		print_arr(buffer, b_index);
+	if (is_leaf(root)){
+		codewords[root->letter] = convert_bin_to_dec(buffer, b_index);
+
+		if (p_flag){
+			printf("%c: ", root->letter);
+			print_arr(buffer, b_index);
+		}
 	}
 }
 
@@ -210,15 +230,19 @@ unsigned int get_huff_tree_height(Heap_Node *root){
 	}
 }
 
+//maybe I should return the array of codewords and transmit the tree initially
 Heap_Node *create_huffman_code(char *letters, unsigned *freqs, int n, int p_flag){
 	Heap_Node *root;
-	int *buffer, b_index;
+	unsigned *buffer, b_index, *codewords;
 
 	root = build_huffman_tree(letters, freqs, n);
 	buffer = malloc(sizeof(int) * get_huff_tree_height(root));
+	codewords = malloc(sizeof(int) * N_CHARS);
 	b_index = 0;
 
-	assign_codes(root, buffer, b_index, p_flag);
+	assign_codes(root, buffer, b_index, codewords, p_flag);
+
+	free(codewords);	//make sure to return in some form instead
 	free(buffer);
 
 	return root;
