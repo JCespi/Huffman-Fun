@@ -134,7 +134,7 @@ Heap_Node *extract_huff_tree(Min_Heap *min_heap){
 
 Min_Heap *create_and_build_heap(unsigned *freq_table){
 	Min_Heap *min_heap;
-	int i, n_used_chars;
+	int i, f, n_used_chars;
 
 	n_used_chars = 0;
 
@@ -147,9 +147,9 @@ Min_Heap *create_and_build_heap(unsigned *freq_table){
 		return NULL;
 
 	//iterate through entire freq table, but only add used chars to heap
-	for (i = 0; i < N_CHARS; i++)
-		if (freq_table[i])
-			min_heap->array[i] = create_new_node(i, freq_table[i]);
+	for (i = 0, f = 0; f < N_CHARS; f++)
+		if (freq_table[f])
+			min_heap->array[i++] = create_new_node(f, freq_table[f]);
 	
 	min_heap->size = n_used_chars;
 	build_heap(min_heap);
