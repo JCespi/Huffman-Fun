@@ -14,16 +14,13 @@ typedef struct min_heap {
 } Min_Heap;
 
 /* TO-DO
+ * add an array of structs with two int fields in order to transmit:
+ * 		- [codeword (in decimal)], [num of bits associated with code] 
  * add code to find the average length of the huffman code
  * use a hashtable to store the letters along with their frequencies
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
  * check for memory leaks by compiling on the zoo
- * INTERESTING observation:
- * 			- for codewords that begin with 0's, the codewords will be different,
- * 			  but when converting to decimal there can be duplicates by
- * 			  nature of converting numbers (e.g. 010 (2)== 00010 (2) == 2 (10))
- * 			- I might actually have to store a sequence of bits :0
 */
 
 //====================Heap Functions===========================
