@@ -1,10 +1,11 @@
 CC = gcc
 CFLAGS = -std=c99 -pedantic -Wall 
 
-huffman: huffman.o
-	$(CC) $(CFLAGS) -o huffman huffman.o
+compress: compress.o huffman.o
+	$(CC) $(CFLAGS) -o compress compress.o huffman.o
 
+compress.o: huffman.h
 huffman.o: huffman.h
 
 clean:
-	rm -f huffman *.o
+	rm -f compress *.o
