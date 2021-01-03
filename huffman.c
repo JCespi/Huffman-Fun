@@ -139,11 +139,10 @@ Min_Heap *create_and_build_heap(unsigned *freq_table){
 	n_used_chars = 0;
 
 	//find the number of used characters to create approp. sized heap
-	for (i=0; i < n_used_chars; i++)
+	for (i=0; i < N_CHARS; i++)
 		if (freq_table[i])
 			n_used_chars++;
-	printf("number of used chars: %d\n", n_used_chars);
-
+			
 	if ((min_heap = create_heap(n_used_chars)) == NULL)
 		return NULL;
 
@@ -261,7 +260,7 @@ Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_fla
 	//generate the huffman tree and save its root to argument
 	if ((huff_tree = build_huffman_tree(freq_table)) == NULL)
 		return NULL;
-		
+
 	*root = huff_tree;
 
 	//initialize the bit buffer and the array of code word structs
