@@ -127,7 +127,19 @@ void build_heap(Min_Heap *min_heap){
 		i--;
 	}
 }
+
+void free_min_heap(Min_Heap *min_heap){
+	free(min_heap->array);
+	free(min_heap);
+}
 //=============================================================
+Heap_Node *extract_huff_tree(Min_Heap *min_heap){
+	if (min_heap->size != 1)
+		return NULL;
+
+	return min_heap->array[0];
+}
+
 Min_Heap *create_and_build_heap(char *letters, unsigned int *freqs, int n){
 	Min_Heap *min_heap;
 	int i;
@@ -144,7 +156,7 @@ Min_Heap *create_and_build_heap(char *letters, unsigned int *freqs, int n){
 }
 
 Heap_Node *build_huffman_tree(char *letters, unsigned int *freqs, int n){
-	Heap_Node *left_node, *top_node, *right_node;
+	Heap_Node *left_node, *top_node, *right_node, *root_node;
 	Min_Heap *min_heap;
 	unsigned int combined_freq;
 
@@ -162,11 +174,10 @@ Heap_Node *build_huffman_tree(char *letters, unsigned int *freqs, int n){
 		insert_new_node(min_heap, top_node);
 	}
 
-	//free the min heap container's pointer array and the container itself
-	// free(min_heap->array);
-	// free(min_heap);
+	root_node = extract_huff_tree(min_heap);	//extract the huffman tree
+	free_min_heap(min_heap);					//free min heap container
 
-	return extract_min(min_heap);
+	return root_node;
 }
 
 void print_arr(int *arr, int n) { 
