@@ -186,19 +186,19 @@ void print_arr(int *arr, int n) {
     printf("\n"); 
 } 
 
-void print_codes(Heap_Node *root, int *buffer, int b_index){
+void assign_codes(Heap_Node *root, int *buffer, int b_index, int p_flag){
 
 	if (root->left){
 		buffer[b_index] = ZERO_BIT;
-		print_codes(root->left, buffer, b_index + 1);
+		assign_codes(root->left, buffer, b_index + 1, p_flag);
 	}
 
 	if (root->right){
 		buffer[b_index] = ONE_BIT;
-		print_codes(root->right, buffer, b_index + 1);
+		assign_codes(root->right, buffer, b_index + 1, p_flag);
 	}
 
-	if (is_leaf(root)){
+	if (p_flag && is_leaf(root)){
 		printf("%c: ", root->letter);
 		print_arr(buffer, b_index);
 	}
@@ -220,7 +220,7 @@ unsigned int get_huff_tree_height(Heap_Node *root){
 	}
 }
 
-Heap_Node *create_huffman_code(char *letters, unsigned int *freqs, int n){
+Heap_Node *create_huffman_code(char *letters, unsigned *freqs, int n, int p_flag){
 	Heap_Node *root;
 	int *buffer, b_index;
 
@@ -228,7 +228,7 @@ Heap_Node *create_huffman_code(char *letters, unsigned int *freqs, int n){
 	buffer = malloc(sizeof(int) * get_huff_tree_height(root));
 	b_index = 0;
 
-	print_codes(root, buffer, b_index);
+	assign_codes(root, buffer, b_index, p_flag);
 	free(buffer);
 
 	return root;
@@ -255,7 +255,7 @@ int main(int argc, char **argv){
     unsigned int freq[] = { 5, 9, 12, 13, 16, 45 }; 
 	int size = 6;
 
-	root = create_huffman_code(arr, freq, size);
+	root = create_huffman_code(arr, freq, size, 1);
 	free_huffman_tree(root);
 
 	return 0;
