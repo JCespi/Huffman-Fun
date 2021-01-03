@@ -19,7 +19,6 @@ typedef struct min_heap {
 } Min_Heap;
 
 /* TO-DO
- * fix output
  * add code to find the average length of the huffman code
  * make an API to make working with essential functions easier for items below
  * think of a data structure to hold the codes
@@ -67,8 +66,8 @@ void heapify(Min_Heap *min_heap, unsigned int index){
 	unsigned int smallest, left, right;
 	
 	smallest = index;
-	left = 2 * index + 1;
-	right = 2 * index + 1;
+	left  = 2 * index + 1;
+	right = 2 * index + 2;
 
 	if (left < min_heap->size && min_heap->array[left]->freq < min_heap->array[smallest]->freq)
 		smallest = left;
