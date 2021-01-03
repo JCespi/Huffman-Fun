@@ -16,11 +16,8 @@ typedef struct code_word {
 	unsigned int n_bits;		//num of bits and indicator of existence
 } Code_Word;
 
-//returns a huffman tree by using a priority queue
-Heap_Node *build_huffman_tree(char *letters, unsigned int *freqs, int n);
-
 //fills in root argument and returns array of codewords
-Code_Word *create_huffman_code(Heap_Node **root, char *letters, unsigned *freqs, int n, int p_flag);
+Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int n, int p_flag);
 
 //frees the huffman tree
 void free_huffman_tree(Heap_Node *root);
