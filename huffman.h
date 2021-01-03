@@ -1,5 +1,7 @@
 //API for creating a Huffman code; Jeacy Espinoza
 
+#define N_CHARS 256
+
 //a node in a huffman tree (N nodes total)
 typedef struct min_heap_node {
 	unsigned int letter;		    //1  byte

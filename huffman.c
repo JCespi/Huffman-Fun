@@ -3,7 +3,6 @@
 #include "huffman.h"
 
 #define INTERNAL_NODE_MARKER '$'
-#define N_CHARS 256
 #define ZERO_BIT 0
 #define ONE_BIT  1
 
