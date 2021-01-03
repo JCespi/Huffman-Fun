@@ -181,9 +181,8 @@ void print_arr(unsigned *arr, unsigned n) {
 unsigned convert_bin_to_dec(unsigned *bit_array, unsigned last_index){
 	unsigned i, decimal_output, multiplier;
 
-
-	decimal_output = 0;			  //decimal number
-	multiplier = 1 << last_index; //2 ^ last_index
+	decimal_output = 0;			      //decimal number
+	multiplier = 1 << (last_index-1); //2 ^ (last_index - 1)
 
 	for (i=0; i < last_index; i++){
 		decimal_output += (bit_array[i]) ? multiplier : 0;
@@ -242,6 +241,9 @@ Heap_Node *create_huffman_code(char *letters, unsigned *freqs, int n, int p_flag
 	b_index = 0;
 
 	assign_codes(root, buffer, b_index, codewords, p_flag);
+
+	for (int i='a'; i < 'a' + n; i++)
+		printf("Letter: %c, Codeword: %d\n", i, codewords[i]);
 
 	free(codewords);	//make sure to return in some form instead
 	free(buffer);
