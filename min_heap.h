@@ -12,7 +12,7 @@ typedef struct min_heap_node {
 typedef struct min_heap {
 	unsigned int size;
 	unsigned int capacity;
-	Heap_Node **array;
+	void **array;
 } Min_Heap;
 
 /*
@@ -26,14 +26,10 @@ Min_Heap *create_heap(unsigned int capacity);
 
 void build_heap(Min_Heap *min_heap, int (*compar)(const void*, const void*));
 
-Heap_Node *create_new_node(char letter, unsigned int freq);
+void *extract_min(Min_Heap *min_heap, int (*compar)(const void*, const void*));
 
-Heap_Node *extract_min(Min_Heap *min_heap, int (*compar)(const void*, const void*));
-
-void insert_new_node(Min_Heap *min_heap, Heap_Node *new_node);
+void insert_new_node(Min_Heap *min_heap, void *new_node, int (*compar)(const void*, const void*));
 
 int has_one_element(Min_Heap *min_heap);
-
-int is_leaf(Heap_Node *node);
 
 void free_min_heap(Min_Heap *min_heap);

@@ -12,24 +12,13 @@ Min_Heap *create_heap(unsigned int capacity){
 	min_heap = malloc(sizeof(Min_Heap));
 	min_heap->size = 0;
 	min_heap->capacity = capacity;
-	min_heap->array = malloc(sizeof(Heap_Node*) * capacity);
+	min_heap->array = malloc(sizeof(void*) * capacity);
 
 	return min_heap;
 }
 
-Heap_Node *create_new_node(char letter, unsigned int freq){
-	Heap_Node *new_node;
-
-	new_node = malloc(sizeof(Heap_Node));
-	new_node->letter = letter;
-	new_node->freq = freq;
-	new_node->left = new_node->right = NULL;
-	
-	return new_node;	
-}
-
-void swap_heap_nodes(Heap_Node **n1, Heap_Node **n2){
-	Heap_Node *temp_node;
+void swap_heap_nodes(void **n1, void **n2){
+	void *temp_node;
 
 	temp_node = *n1;
 	*n1 = *n2;
@@ -59,8 +48,8 @@ int has_one_element(Min_Heap *min_heap){
 	return min_heap->size == 1;
 }
 
-Heap_Node *extract_min(Min_Heap *min_heap, int (*compar)(const void*, const void*)){
-	Heap_Node *min_node;
+void *extract_min(Min_Heap *min_heap, int (*compar)(const void*, const void*)){
+	void *min_node;
 
 	min_node = min_heap->array[0];								//pop off the root
 	min_heap->array[0] = min_heap->array[min_heap->size - 1];	//insert (large) leaf as root
@@ -70,22 +59,18 @@ Heap_Node *extract_min(Min_Heap *min_heap, int (*compar)(const void*, const void
 	return min_node;
 }
 
-void insert_new_node(Min_Heap *min_heap, Heap_Node *new_node){
+void insert_new_node(Min_Heap *min_heap, void *new_node, int (*compar)(const void*, const void*)){
 	int i;
 
 	min_heap->size++;
 	i = min_heap->size - 1;
-
-	while (i && new_node->freq < min_heap->array[(i - 1) / 2]->freq){
+	
+	while (i && compar(new_node, min_heap->array[(i - 1) / 2]) < 0){
 		min_heap->array[i] = min_heap->array[(i - 1) / 2];
 		i = (i - 1) / 2;
 	}
 
 	min_heap->array[i] = new_node;
-}
-
-int is_leaf(Heap_Node *node){
-	return !(node->left) && !(node->right);
 }
 	
 void build_heap(Min_Heap *min_heap, int (*compar)(const void*, const void*)){

@@ -16,9 +16,25 @@
  * add bit fields
 */
 
+//=============================================================
 //comparator function to be used for heap creation and extraction
 int comparator(const void *node1, const void *node2){
 	return (((Heap_Node*)node1)->freq - ((Heap_Node*)node2)->freq);
+}
+
+Heap_Node *create_new_node(char letter, unsigned int freq){
+	Heap_Node *new_node;
+
+	new_node = malloc(sizeof(Heap_Node));
+	new_node->letter = letter;
+	new_node->freq = freq;
+	new_node->left = new_node->right = NULL;
+	
+	return new_node;	
+}
+
+int is_leaf(Heap_Node *node){
+	return !(node->left) && !(node->right);
 }
 //=============================================================
 Heap_Node *extract_huff_tree(Min_Heap *min_heap){
@@ -70,7 +86,7 @@ Heap_Node *build_huffman_tree(unsigned *freq_table){
 		top_node->left = left_node;
 		top_node->right = right_node;
 
-		insert_new_node(min_heap, top_node);
+		insert_new_node(min_heap, top_node, comparator);
 	}
 
 	root_node = extract_huff_tree(min_heap);	//extract the huffman tree
