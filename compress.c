@@ -43,7 +43,13 @@ void encode(void){
     codewords = create_huffman_code(&root, freq_table, 1);
 
     //rewind stdin
+    rewind(stdin);
 
+    //transmit the codewords
+    while ((ch = getchar()) != EOF)
+        put_bits(codewords[ch].n_bits, codewords[ch].code_d);
+
+    //free the tree, the codeword table, and the frequency table
     free_huffman_tree(root);
     free(freq_table);
     free(codewords);
