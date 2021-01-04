@@ -7,6 +7,7 @@
 #define ONE_BIT  1
 
 /* TO-DO
+ * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
  * add code to find the entropy of the huffman code
  * write a commandline parser for compress
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
