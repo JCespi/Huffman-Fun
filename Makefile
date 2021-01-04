@@ -15,4 +15,4 @@ decode: encode
 	ln -f encode decode
 
 clean:
-	rm -f compress *.o
+	rm -f encode decode *.o
