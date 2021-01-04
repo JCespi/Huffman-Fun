@@ -15,7 +15,7 @@
 // putBits(), and the final call must be followed by a call to flushBits().
 //
 
-void putBits (int n_bits, long code);
+void put_bits (int n_bits, long code);
 
 
 // If there are any bits in the bit stream being saved for the next call to
@@ -23,7 +23,7 @@ void putBits (int n_bits, long code);
 // padded with up to CHAR_BIT-1 zero bits.
 //
 
-void flushBits (void);
+void flush_bits (void);
 
 
 // Return an integer whose low-order bits are the next NBITS bits from a
@@ -37,4 +37,4 @@ void flushBits (void);
 // CHAR_BIT-bit characters.
 //
 
-long getBits (int n_bits);
+long get_bits (int n_bits);

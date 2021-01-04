@@ -7,7 +7,7 @@ static int n_extra_bits = 0;            // num of bits from previous byte(s)
 static unsigned long extra_bits = 0;     // Extra bits from previous byte(s)
 
 // Write parameter code of size n_bits to standard output
-void putBits (int n_bits, long code){
+void put_bits (int n_bits, long code){
 	unsigned long max_code, c;
 
     if (n_bits <= 0 || NBITS_MAX < n_bits) {              // NBITS valid?
@@ -41,13 +41,13 @@ void putBits (int n_bits, long code){
 }
 
 // Flush remaining bits to standard output
-void flushBits (void){
+void flush_bits (void){
 	if (n_extra_bits != 0)
 	    putchar(extra_bits << (CHAR_BIT - n_extra_bits));
 }
 
 // Return next code (#bits = NBITS) from input stream or EOF on end-of-file
-long getBits (int n_bits){
+long get_bits (int n_bits){
 	unsigned long max_code;
 	long result;
 
