@@ -3,11 +3,16 @@ CFLAGS = -std=c99 -pedantic -Wall
 DEPS = huffman.h heap.h transmit.h
 OBJ = compress.o huffman.o heap.o transmit.o
 
+all: encode decode
+
 %.o: %.c $(DEPS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-compress: $(OBJ)
+encode: $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
+
+decode: encode
+	ln -f encode decode
 
 clean:
 	rm -f compress *.o
