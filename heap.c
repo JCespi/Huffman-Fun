@@ -3,13 +3,13 @@
 #include "heap.h"
 
 //=============================================================
-Min_Heap *create_heap(unsigned int capacity){
-	Min_Heap *min_heap;
+Heap *create_heap(unsigned int capacity){
+	Heap *min_heap;
 
 	if (capacity == 0)
 		return NULL;
 
-	min_heap = malloc(sizeof(Min_Heap));
+	min_heap = malloc(sizeof(Heap));
 	min_heap->size = 0;
 	min_heap->capacity = capacity;
 	min_heap->array = malloc(sizeof(void*) * capacity);
@@ -25,7 +25,7 @@ void swap_heap_nodes(void **n1, void **n2){
 	*n2 = temp_node;
 }
 
-void heapify(Min_Heap *min_heap, unsigned index, int (*compar)(const void*, const void*)){
+void heapify(Heap *min_heap, unsigned index, int (*compar)(const void*, const void*)){
 	unsigned int smallest, left, right;
 	
 	smallest = index;
@@ -44,11 +44,11 @@ void heapify(Min_Heap *min_heap, unsigned index, int (*compar)(const void*, cons
 	}
 }
 
-int has_one_element(Min_Heap *min_heap){
+int has_one_element(Heap *min_heap){
 	return min_heap->size == 1;
 }
 
-void *extract_min(Min_Heap *min_heap, int (*compar)(const void*, const void*)){
+void *extract_min(Heap *min_heap, int (*compar)(const void*, const void*)){
 	void *min_node;
 
 	min_node = min_heap->array[0];								//pop off the root
@@ -59,7 +59,7 @@ void *extract_min(Min_Heap *min_heap, int (*compar)(const void*, const void*)){
 	return min_node;
 }
 
-void insert_new_node(Min_Heap *min_heap, void *new_node, int (*compar)(const void*, const void*)){
+void insert_new_node(Heap *min_heap, void *new_node, int (*compar)(const void*, const void*)){
 	int i;
 
 	min_heap->size++;
@@ -73,7 +73,7 @@ void insert_new_node(Min_Heap *min_heap, void *new_node, int (*compar)(const voi
 	min_heap->array[i] = new_node;
 }
 	
-void build_heap(Min_Heap *min_heap, int (*compar)(const void*, const void*)){
+void build_heap(Heap *min_heap, int (*compar)(const void*, const void*)){
 	int i, n;
 
 	n = min_heap->size - 1;
@@ -85,7 +85,7 @@ void build_heap(Min_Heap *min_heap, int (*compar)(const void*, const void*)){
 	}
 }
 
-void free_min_heap(Min_Heap *min_heap){
+void free_min_heap(Heap *min_heap){
 	free(min_heap->array);
 	free(min_heap);
 }

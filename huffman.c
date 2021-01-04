@@ -37,8 +37,8 @@ int is_leaf(Heap_Node *node){
 	return !(node->left) && !(node->right);
 }
 //=============================================================
-Min_Heap *create_and_build_heap(unsigned *freq_table){
-	Min_Heap *min_heap;
+Heap *create_and_build_heap(unsigned *freq_table){
+	Heap *min_heap;
 	int i, f, n_used_chars;
 
 	n_used_chars = 0;
@@ -64,7 +64,7 @@ Min_Heap *create_and_build_heap(unsigned *freq_table){
 
 Heap_Node *build_huffman_tree(unsigned *freq_table){
 	Heap_Node *left_node, *top_node, *right_node, *root_node;
-	Min_Heap *min_heap;
+	Heap *min_heap;
 	unsigned int combined_freq;
 
 	if ((min_heap = create_and_build_heap(freq_table)) == NULL)
