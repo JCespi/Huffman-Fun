@@ -1,5 +1,5 @@
 //API for creating a Huffman code; Jeacy Espinoza
-#include "min_heap.h"
+#include "heap.h"
 
 #define N_CHARS 256
 

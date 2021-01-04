@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "min_heap.h"
+#include "heap.h"
 
 //=============================================================
 Min_Heap *create_heap(unsigned int capacity){
