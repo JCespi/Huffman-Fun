@@ -14,6 +14,7 @@ unsigned *create_freq_table(void){
     freq_table['d'] = 12;
     freq_table['e'] = 9;
     freq_table['f'] = 5;
+    freq_table['j'] = 46;
 
     return freq_table;
 }
