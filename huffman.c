@@ -6,15 +6,6 @@
 #define INTERNAL_NODE_MARKER '$'
 #define EFFICIENT 1
 
-/* TO-DO
- * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
- * write a commandline parser for compress
- * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
- * write a decoder that uses the data structure thought up ^^ there to decode
- * check for memory leaks by compiling on the zoo
- * add bit fields
-*/
-
 //=============================================================
 //comparator function to be used for heap creation and extraction
 int comparator(const void *node1, const void *node2){
