@@ -1,5 +1,6 @@
 #Ignore object files
 *.o
 
-#Ignore executable
-compress
+#Ignore executables
+encode
+decode
