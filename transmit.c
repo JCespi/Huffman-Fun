@@ -11,32 +11,32 @@ void put_bits (int n_bits, long code){
 	unsigned long max_code, c;
 
     if (n_bits <= 0 || NBITS_MAX < n_bits) {              // NBITS valid?
-		fprintf(stderr, "invalid n_bits = %d\n", n_bits);
-		return;
+		  fprintf(stderr, "invalid n_bits = %d\n", n_bits);
+		  return;
     }
 
     max_code = 1UL << (n_bits-1);           			// Compute maximum code
     max_code = max_code + (max_code-1);
 
     if (code < 0 || max_code < code) {                   // CODE representable?
-		fprintf(stderr, "nBits = %d, maxCode = %lu, code = %ld\n", n_bits, max_code, code);
-		return;
+		  fprintf(stderr, "nBits = %d, maxCode = %lu, code = %ld\n", n_bits, max_code, code);
+		  return;
     }
 
     // If EXTRABITS << NBITS could overflow, output high-order CHAR_BIT bits
     if (n_bits > NBITS_MAX - CHAR_BIT) {
-		putBits(CHAR_BIT, code >> (n_bits-CHAR_BIT));
-		n_bits -= CHAR_BIT;
+		  put_bits(CHAR_BIT, code >> (n_bits-CHAR_BIT));
+		  n_bits -= CHAR_BIT;
     }
 
     n_extra_bits += n_bits;                                    // Add bits to EXTRABITS
     extra_bits = (extra_bits << n_bits) | code;
 
     while (n_extra_bits >= CHAR_BIT) {                        // Output whole chars &
-		n_extra_bits -= CHAR_BIT;                             //  save remaining bits
-		c = extra_bits >> n_extra_bits;
-		putchar (c);
-		extra_bits ^= c << n_extra_bits;
+      n_extra_bits -= CHAR_BIT;                             //  save remaining bits
+      c = extra_bits >> n_extra_bits;
+      putchar (c);
+      extra_bits ^= c << n_extra_bits;
     }
 }
 
@@ -52,8 +52,8 @@ long get_bits (int n_bits){
 	long result;
 
     if (n_bits <= 0 || NBITS_MAX < n_bits) {              // NBITS valid?
-		fprintf (stderr, "invalid n_bits = %d\n", n_bits);
-		return EOF;
+		  fprintf (stderr, "invalid n_bits = %d\n", n_bits);
+		  return EOF;
     }
 
     max_code = 1 << (n_bits-1);             // Maximum possible code
@@ -66,19 +66,19 @@ long get_bits (int n_bits){
 
     // If EXTRABITS << NBITS could overflow, read high-order CHAR_BIT bits
     if (n_bits > NBITS_MAX - CHAR_BIT) {
-		result = getBits (CHAR_BIT);
-		if (result < 0)
-			return EOF;
-		n_bits -= CHAR_BIT;
+      result = get_bits (CHAR_BIT);
+      if (result < 0)
+        return EOF;
+      n_bits -= CHAR_BIT;
     }
 
     // Read enough new bytes to have at least NBITS bits to extract code
     long c;
     while (n_extra_bits < n_bits) {
-		if ((c = getchar()) == EOF)                     // Too few bits?
-			return EOF;
-		n_extra_bits += CHAR_BIT;
-		extra_bits = (extra_bits << CHAR_BIT) | c;
+      if ((c = getchar()) == EOF)                     // Too few bits?
+        return EOF;
+      n_extra_bits += CHAR_BIT;
+      extra_bits = (extra_bits << CHAR_BIT) | c;
     }
 
     // Extract remaining bits and save remainder
