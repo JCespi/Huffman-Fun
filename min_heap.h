@@ -1,18 +1,23 @@
 //API for creating a special minimum heap; Jeacy Espinoza
 
+/* _______________________Instructions To Use Functions Below___________________________
+ * | For the comparator parameter, int return value meaning:						   |	
+ * |	  1. (< 0) means that the first parameter is less than the second parameter	   |	
+ * |      2. (= 0) means that the first parameter is equal to the second parameter	   |
+ * |	  3. (> 0) means that the first parameter is greater than the second parameter |
+ * |																				   |
+ * | Thus, write your comparator as follows:										   |	
+ * |		 to create a minimum heap, comparator(node1, node2) <  0				   | 
+ * |								 and										       |
+ * |	     to create a maximum heap, comparator(node1, node2) >= 0				   |
+ * _____________________________________________________________________________________*/
+
 //container for the minimum heap
 typedef struct min_heap {
 	unsigned int size;
 	unsigned int capacity;
 	void **array;
 } Min_Heap;
-
-/*
- * For the comparator parameter, int return value as signified:
- * 	  - (< 0) means that the first parameter is less than the second parameter
- *    - (= 0) means that the first parameter is equal to the second parameter
- * 	  - (> 0) means that the first parameter is greater than the second parameter
- * */
 
 Min_Heap *create_heap(unsigned int capacity);
 
