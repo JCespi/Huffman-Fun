@@ -2,6 +2,28 @@
 #include <stdlib.h>
 #include "huffman.h"
 
+void encode(){
+    //create freq table
+    //while (c = getchar())
+    //      freq_table[c]++;
+    //
+    //create_huffman_code()
+    //
+    //transmit the huffman tree
+    //iterate through stdin again I guess, sending
+    //freq_table[c] to stdout as a bitstream
+    ;
+}
+
+void decode(){
+    //receive the tree and make a replica
+    //
+    //while (c = get_bit_input())
+    //      char = trace_through_tree <- difficult b/c happens bit by bit
+    //      output char 
+    ;
+}
+
 unsigned *create_freq_table(void){
     unsigned int *freq_table; //char-indexed frequency array
 
