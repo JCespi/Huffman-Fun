@@ -15,3 +15,8 @@ Plan thus far:
 Bonus (Challenging)
 	1. Think of how to expand to more than char's. 
 		(such as groups of letters)
+
+Accomplished:
+	- a heap data structure that can operate on any kind of node
+	- a huffman encoding procedure that uses the heap
+	- a way to store and send the codewords
