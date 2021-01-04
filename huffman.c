@@ -37,13 +37,6 @@ int is_leaf(Heap_Node *node){
 	return !(node->left) && !(node->right);
 }
 //=============================================================
-Heap_Node *extract_huff_tree(Min_Heap *min_heap){
-	if (min_heap->size != 1)
-		return NULL;
-
-	return min_heap->array[0];
-}
-
 Min_Heap *create_and_build_heap(unsigned *freq_table){
 	Min_Heap *min_heap;
 	int i, f, n_used_chars;
@@ -89,7 +82,7 @@ Heap_Node *build_huffman_tree(unsigned *freq_table){
 		insert_new_node(min_heap, top_node, comparator);
 	}
 
-	root_node = extract_huff_tree(min_heap);	//extract the huffman tree
+	root_node = min_heap->array[0];			    //extract the huffman tree
 	free_min_heap(min_heap);					//free min heap container
 
 	return root_node;
