@@ -22,7 +22,7 @@ int comparator(const void *node1, const void *node2){
 	return (((Heap_Node*)node1)->freq - ((Heap_Node*)node2)->freq);
 }
 
-Heap_Node *create_new_node(char letter, unsigned int freq){
+Heap_Node *create_huff_node(char letter, unsigned int freq){
 	Heap_Node *new_node;
 
 	new_node = malloc(sizeof(Heap_Node));
@@ -54,7 +54,7 @@ Min_Heap *create_and_build_heap(unsigned *freq_table){
 	//iterate through entire freq table, but only add used chars to heap
 	for (i = 0, f = 0; f < N_CHARS; f++)
 		if (freq_table[f])
-			min_heap->array[i++] = create_new_node(f, freq_table[f]);
+			min_heap->array[i++] = create_huff_node(f, freq_table[f]);
 	
 	min_heap->size = n_used_chars;
 	build_heap(min_heap, comparator);
@@ -71,15 +71,15 @@ Heap_Node *build_huffman_tree(unsigned *freq_table){
 		return NULL;
 
 	while (!has_one_element(min_heap)){
-		left_node  = extract_min(min_heap, comparator);
-		right_node = extract_min(min_heap, comparator);
+		left_node  = (Heap_Node*)extract_min(min_heap, comparator);
+		right_node = (Heap_Node*)extract_min(min_heap, comparator);
 
 		combined_freq = left_node->freq + right_node->freq;
-		top_node = create_new_node(INTERNAL_NODE_MARKER, combined_freq);
+		top_node = create_huff_node(INTERNAL_NODE_MARKER, combined_freq);
 		top_node->left = left_node;
 		top_node->right = right_node;
 
-		insert_new_node(min_heap, top_node, comparator);
+		insert_new_node(min_heap, (void*)top_node, comparator);
 	}
 
 	root_node = min_heap->array[0];			    //extract the huffman tree
