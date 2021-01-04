@@ -4,6 +4,7 @@
 
 //Macros
 #define INTERNAL_NODE_MARKER '$'
+#define EFFICIENT 1
 #define ZERO_BIT 0
 #define ONE_BIT  1
 
@@ -18,17 +19,12 @@
 */
 
 //=============================================================
-//utility function to specify whether to create a min heap or max heap (efficient or inefficient)
-int comparator_utility(const void *node1, const void *node2, int efficient){
-	if (efficient)
+//comparator function to be used for heap creation and extraction
+int comparator(const void *node1, const void *node2){
+	if (EFFICIENT)
 		return (((Heap_Node*)node1)->freq - ((Heap_Node*)node2)->freq);
 	else 
 		return (((Heap_Node*)node2)->freq - ((Heap_Node*)node1)->freq);
-}
-
-//comparator function to be used for heap creation and extraction
-int comparator(const void *node1, const void *node2){
-	return comparator_utility(node1, node2, 1);
 }
 
 Heap_Node *create_huff_node(char letter, unsigned int freq){
