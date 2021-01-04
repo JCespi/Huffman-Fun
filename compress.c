@@ -12,6 +12,7 @@
  * add bit fields
  * write code in encode to copy stdin to a temporary file
  * add error handling to main()
+ * maybe make a main.c that has the main() that calls on encode and decode (defined in some .h)
 */
 
 void encode(void){
