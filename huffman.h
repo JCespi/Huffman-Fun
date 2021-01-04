@@ -5,11 +5,11 @@
 
 //a node in a huffman tree (N nodes total)
 typedef struct heap_node {
-	unsigned int letter;		    //1  byte
-	unsigned int freq;				//4  bytes
+	unsigned int letter;		//1  byte
+	unsigned int freq;		    //4  bytes
 	struct heap_node *left;		//8  bytes
 	struct heap_node *right;	//8  bytes
-} Heap_Node;						//25 bytes -> 21*N bytes total
+} Heap_Node;					//21 bytes -> 21*N bytes total
 
 //contains the codeword (decimal) and the num of bits
 typedef struct code_word {
