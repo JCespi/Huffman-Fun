@@ -7,7 +7,6 @@
 #define ONE_BIT  1
 
 /* TO-DO
- * make min heap have only one struct with a void ptr array
  * add code to find the entropy of the huffman code
  * write a commandline parser for compress
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
