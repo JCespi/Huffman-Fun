@@ -11,3 +11,7 @@ Plan thus far:
 4. Code up Stan's code to output bits (modified of course)
 5. Write code to decode the huffman tree and accept bit stream.
 6. Add error correction to the huffman code somehow.
+
+Bonus (Challenging)
+	1. Think of how to expand to more than char's. 
+		(such as groups of letters)
