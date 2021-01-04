@@ -11,7 +11,7 @@ void putBits (int n_bits, long code){
 	unsigned long max_code, c;
 
     if (n_bits <= 0 || NBITS_MAX < n_bits) {              // NBITS valid?
-		fprintfs(stderr, "invalid n_bits = %d\n", n_bits);
+		fprintf(stderr, "invalid n_bits = %d\n", n_bits);
 		return;
     }
 
