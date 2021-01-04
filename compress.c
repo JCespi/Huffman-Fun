@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "huffman.h"
+#include "transmit.h"
 
 void encode(){
     //create freq table
