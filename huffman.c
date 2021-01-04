@@ -90,12 +90,6 @@ void print_arr(int *arr, int n){
     printf("\n"); 
 }
 
-void print_decimal_codes(Code_Word *codewords){
-	for (int i=0; i < N_CHARS; i++)
-		if (codewords[i].n_bits)
-			printf("Letter: %c, Codeword: %d, bits: %d\n", i, codewords[i].code_d, codewords[i].n_bits);
-}
-
 //given an array representing a binary number, computes the decimal equivalent
 unsigned convert_bin_to_dec(int *bit_array, int last_index){
 	unsigned i, decimal_output, multiplier;
@@ -111,43 +105,29 @@ unsigned convert_bin_to_dec(int *bit_array, int last_index){
 	return decimal_output;
 }
 
-void assign_codes(Heap_Node *root, int *buffer, int b_index, Code_Word *codewords, int p_flag){
+//given a decimal number and a num of bits, returns (str) binary number equivalent
+char *convert_dec_to_bin(unsigned decimal_n, unsigned n_bits){
+	int i;
+	unsigned bin_num[n_bits], j;
+	char *str_bin_num;
 
-	if (root->left){
-		buffer[b_index] = ZERO_BIT;
-		assign_codes(root->left, buffer, b_index + 1, codewords, p_flag);
-	}
+	str_bin_num = calloc(n_bits + 1, sizeof(char));
 
-	if (root->right){
-		buffer[b_index] = ONE_BIT;
-		assign_codes(root->right, buffer, b_index + 1, codewords, p_flag);
-	}
-
-	if (is_leaf(root)){
-		codewords[root->letter].code_d = convert_bin_to_dec(buffer, b_index);
-		codewords[root->letter].n_bits = b_index;
-
-		if (p_flag){
-			printf("%c: ", root->letter);
-			print_arr(buffer, b_index);
-		}
-	}
-}
-
-unsigned int get_huff_tree_height(Heap_Node *root){
-	unsigned int l_subtree_h, r_subtree_h;
-
-	if (root == NULL)
-		return 0;
-	else {
-		l_subtree_h = get_huff_tree_height(root->left);
-		r_subtree_h = get_huff_tree_height(root->right);
-
-		if (l_subtree_h > r_subtree_h)
-			return l_subtree_h + 1;
-		else
-			return r_subtree_h + 1;
-	}
+	//fill in the integer array "backwards"
+	for (i=0; decimal_n > 0; i++, decimal_n /= 2)
+		bin_num[i] = decimal_n % 2;
+	
+	//fill the rest of the array with 0's
+	for (; i < n_bits; i++)
+		bin_num[i] = ZERO_BIT;
+	
+	//fill the string representation
+	for (i=n_bits-1, j=0; i >= 0; i--, j++)
+		str_bin_num[j] = (bin_num[i]) ? '1' : '0';
+	
+	str_bin_num[n_bits] = '\0';
+	
+	return str_bin_num;
 }
 
 int code_exists(Code_Word codeword){
@@ -173,6 +153,64 @@ float find_avg_len(Code_Word *codewords){
 		return (num_sum) / denom;
 }
 
+//dumps letter|frequency|code(2)|code(10)|n_bits to a file
+void dump_input_info(Code_Word *codewords, unsigned *freq_table){
+	unsigned code, n_bits, i;
+	char *str_bin_num;
+	
+	printf("Average Length of codewords = %0.2f\n", find_avg_len(codewords));
+	printf("Letter | Frequency | Code (2) | Code (10) | Num of Bits\n");
+	for (i=0; i < N_CHARS; i++)
+		
+		if (code_exists(codewords[i])){
+			n_bits = codewords[i].n_bits;
+			code = codewords[i].code_d;
+			
+			str_bin_num = convert_dec_to_bin(code, n_bits);
+			
+			printf("%c | %d | %s | %d | %d\n", 
+				     i, freq_table[i], str_bin_num, code, n_bits);
+
+			free(str_bin_num);
+		}
+}
+
+void assign_codes(Heap_Node *root, int *buffer, int b_index, Code_Word *codewords){
+	if (!root)
+		return;
+
+	if (root->left){
+		buffer[b_index] = ZERO_BIT;
+		assign_codes(root->left, buffer, b_index + 1, codewords);
+	}
+
+	if (root->right){
+		buffer[b_index] = ONE_BIT;
+		assign_codes(root->right, buffer, b_index + 1, codewords);
+	}
+
+	if (is_leaf(root)){
+		codewords[root->letter].code_d = convert_bin_to_dec(buffer, b_index);
+		codewords[root->letter].n_bits = b_index;
+	}
+}
+
+unsigned int get_huff_tree_height(Heap_Node *root){
+	unsigned int l_subtree_h, r_subtree_h;
+
+	if (root == NULL)
+		return 0;
+	else {
+		l_subtree_h = get_huff_tree_height(root->left);
+		r_subtree_h = get_huff_tree_height(root->right);
+
+		if (l_subtree_h > r_subtree_h)
+			return l_subtree_h + 1;
+		else
+			return r_subtree_h + 1;
+	}
+}
+
 Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_flag){
 	int *bit_buffer, b_index;
 	Code_Word *codewords;
@@ -190,13 +228,11 @@ Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_fla
 	b_index = 0;
 
 	//fill in the array of code word structs
-	assign_codes(huff_tree, bit_buffer, b_index, codewords, p_flag);
+	assign_codes(huff_tree, bit_buffer, b_index, codewords);
 	
-	//print the array of code words and their average length if appropriate
-	if (p_flag){
-		print_decimal_codes(codewords);
-		printf("The average length = %.2f bits\n", find_avg_len(codewords));
-	}
+	//print info on input and average code length if appropriate
+	if (p_flag)
+		dump_input_info(codewords, freq_table);
 
 	//free the buffer used to store bits
 	free(bit_buffer);
