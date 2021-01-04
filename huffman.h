@@ -2,6 +2,8 @@
 #include "heap.h"
 
 #define N_CHARS 256
+#define ZERO_BIT 0
+#define ONE_BIT  1
 
 //a node in a huffman tree (N nodes total)
 typedef struct heap_node {

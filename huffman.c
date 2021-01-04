@@ -5,8 +5,6 @@
 //Macros
 #define INTERNAL_NODE_MARKER '$'
 #define EFFICIENT 1
-#define ZERO_BIT 0
-#define ONE_BIT  1
 
 /* TO-DO
  * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
