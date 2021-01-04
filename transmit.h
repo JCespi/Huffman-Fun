@@ -15,7 +15,7 @@
 // putBits(), and the final call must be followed by a call to flushBits().
 //
 
-void putBits (int nBits, long code);
+void putBits (int n_bits, long code);
 
 
 // If there are any bits in the bit stream being saved for the next call to
@@ -37,4 +37,4 @@ void flushBits (void);
 // CHAR_BIT-bit characters.
 //
 
-long getBits (int nBits);
+long getBits (int n_bits);
