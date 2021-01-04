@@ -1,19 +1,20 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include "huffman.h"
 #include "transmit.h"
 
 /* TO-DO
  * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
- * write a commandline parser for compress
  * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
  * write a decoder that uses the data structure thought up ^^ there to decode
  * check for memory leaks by compiling on the zoo
  * add bit fields
  * write code in encode to copy stdin to a temporary file
+ * add error handling to main()
 */
 
-void encode(){
+void encode(void){
     Heap_Node *root;
     Code_Word *codewords;
     unsigned *freq_table, ch;
@@ -34,7 +35,7 @@ void encode(){
     free(codewords);
 }
 
-void decode(){
+void decode(void){
     //receive the tree and make a replica
     //
     //while (c = get_bit_input())
@@ -44,7 +45,18 @@ void decode(){
 }
 
 int main(int argc, char **argv){
-    encode();
+    char *path, *exectuable;
+    
+    //get executable name
+    path = argv[0];
+    exectuable = &path[strlen(path) - 6];
+
+    if (strcmp("decode", exectuable) == 0){
+        decode();
+    } else {
+
+        encode();
+    }
 
     return 0;
 }
