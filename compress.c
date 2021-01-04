@@ -13,7 +13,20 @@
  * write code in encode to copy stdin to a temporary file
  * add error handling to main()
  * maybe make a main.c that has the main() that calls on encode and decode (defined in some .h)
+ * add a little function that prints a frequency plot
 */
+
+//start of a function to reduce magnitudes of frequencies (why though?)
+void squish_freqs(unsigned *freq_table){
+    unsigned small_freq, i;
+
+    small_freq = freq_table[0];
+    for (i=1; i < N_CHARS; i++)
+        if (freq_table[i] && freq_table[i] < small_freq)
+            small_freq = freq_table[i];
+    for (i=0; i < N_CHARS; i++)
+        freq_table[i] /= small_freq;
+}
 
 void encode(void){
     Heap_Node *root;
