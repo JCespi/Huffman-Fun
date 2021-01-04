@@ -3,17 +3,35 @@
 #include "huffman.h"
 #include "transmit.h"
 
+/* TO-DO
+ * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
+ * write a commandline parser for compress
+ * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
+ * write a decoder that uses the data structure thought up ^^ there to decode
+ * check for memory leaks by compiling on the zoo
+ * add bit fields
+ * write code in encode to copy stdin to a temporary file
+*/
+
 void encode(){
-    //create freq table
-    //while (c = getchar())
-    //      freq_table[c]++;
-    //
-    //create_huffman_code()
-    //
-    //transmit the huffman tree
-    //iterate through stdin again I guess, sending
-    //freq_table[c] to stdout as a bitstream
-    ;
+    Heap_Node *root;
+    Code_Word *codewords;
+    unsigned *freq_table, ch;
+
+    freq_table = calloc(N_CHARS, sizeof(int));
+
+    //build the frequency table
+    while ((ch = getchar()) != EOF)
+        freq_table[ch]++;
+
+    //create the huffman code
+    codewords = create_huffman_code(&root, freq_table, 1);
+
+    //rewind stdin
+
+    free_huffman_tree(root);
+    free(freq_table);
+    free(codewords);
 }
 
 void decode(){
@@ -43,16 +61,7 @@ unsigned *create_freq_table(void){
 }
 
 int main(int argc, char **argv){
-    Heap_Node *root;
-    Code_Word *codewords;
-    unsigned *freq_table;
-
-    freq_table = create_freq_table();
-    codewords = create_huffman_code(&root, freq_table, 1);
-
-    free_huffman_tree(root);
-	free(codewords);
-    free(freq_table);
+    encode();
 
     return 0;
 }
