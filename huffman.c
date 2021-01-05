@@ -140,6 +140,22 @@ void print_pretty_bar(FILE *fp, unsigned *lens, int n_lens, int position){
 	fprintf(fp, "%s\n", r_ch);
 }
 
+void print_pretty_row(FILE *fp, unsigned *lens, int n_lens){
+	unsigned i, j;
+	char *vert_ch;
+
+	vert_ch = "║";
+
+	for (i=0; i < lens[n_lens - 1]; i++)
+		for (j=0; j < n_lens; j++){
+			if (i == lens[j]){
+				fprintf(fp, "%s", vert_ch);
+				break;
+			} else
+				fprintf(fp, "%s", " ");
+		}	
+}
+
 //dumps letter|frequency|code(2)|code(10)|n_bits to a file
 void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	unsigned code, n_bits, i, *section_lens, acc_len;
@@ -155,7 +171,7 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	section_lens[1] = 5;
 	section_lens[2] = 10;
 	section_lens[3] = 5;
-	
+
 	//turn the array into an accumulative array
 	for (i=0, acc_len=0; i < N_INFO_SECTS; i++){
 		acc_len += section_lens[i];
