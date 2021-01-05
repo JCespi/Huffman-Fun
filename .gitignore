@@ -4,3 +4,6 @@
 #Ignore executables
 encode
 decode
+
+#Ignore file that contains dumped info
+info
