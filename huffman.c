@@ -113,11 +113,11 @@ void print_pretty_bar(FILE *fp, unsigned *lens, int n_lens, int position){
 	} else if (position == MID_BAR){
 		l_ch   = "╠";
 		r_ch   = "╣";
-		div_ch = "╩";
+		div_ch = "╬";
 	} else if (position == BOT_BAR){
 		l_ch   = "╚";
 		r_ch   = "╝";
-		div_ch = "╬";
+		div_ch = "╩";
 	} else
 		return;
 
@@ -155,10 +155,12 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	section_lens[1] = 5;
 	section_lens[2] = 10;
 	section_lens[3] = 5;
+	
 	//turn the array into an accumulative array
-	for (i=0, acc_len=0; i < N_INFO_SECTS; i++)
+	for (i=0, acc_len=0; i < N_INFO_SECTS; i++){
 		acc_len += section_lens[i];
-
+		section_lens[i] = acc_len;
+	}
 
 	fprintf(fp, "Average Length of codewords = %0.2f\n", find_avg_len(codewords));
 
