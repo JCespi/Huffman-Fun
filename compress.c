@@ -6,8 +6,6 @@
 
 /* TO-DO
  * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
- * write an encoder that uses the huffman() to send a sequence of bits (maybe in form of bytes?)
- * write a decoder that uses the data structure thought up ^^ there to decode
  * check for memory leaks by compiling on the zoo
  * add bit fields
  * add error handling to main()
@@ -73,17 +71,29 @@ void encode(void){
     free(codewords);
 }
 
-Heap_Node *receive_huff_tree(Heap_Node *root){
-    ;
+//receives stream of bits sent from encode() to construct tree
+Heap_Node *receive_huff_tree(void){
+    Heap_Node *root;
+
+    if (get_bits(1) == ZERO_BIT){   //internal node
+        root = create_huff_node(INTERNAL_NODE_MARKER, 0);
+        root->left = receive_huff_tree();
+        root->right = receive_huff_tree();
+        return root;
+    } else {                        //leaf node
+        return create_huff_node(get_bits(8), 0);
+    }
 }
 
 void decode(void){
-    //receive the tree and make a replica
-    //
+    Heap_Node *root;
+
+    root = receive_huff_tree();
+    
     //while (c = get_bit_input())
     //      char = trace_through_tree <- difficult b/c happens bit by bit
     //      output char 
-    ;
+    free_huffman_tree(root);
 }
 
 int main(int argc, char **argv){
