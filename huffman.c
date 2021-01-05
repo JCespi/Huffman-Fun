@@ -157,11 +157,14 @@ float find_avg_len(Code_Word *codewords){
 void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	unsigned code, n_bits, i;
 	char *str_bin_num;
+	FILE *fp;
+
+	fp = fopen("info.txt", "w");
 	
 	printf("Average Length of codewords = %0.2f\n", find_avg_len(codewords));
-	printf("╔═══════╦═════╦══════════╦═════╦════════════════╗\n");
-	printf("║%-5s | %-5s | %-10s | %-5s║\n", "Letter", "Freq", "Codeword", "N_bits");
-	printf("╠══════════════════════════════════════════════╣\n");
+	fprintf(fp, "╔═══════╦═════╦══════════╦═════╦════════════════╗\n");
+	fprintf(fp, "║%-5s | %-5s | %-10s | %-5s║\n", "Letter", "Freq", "Codeword", "N_bits");
+	fprintf(fp, "╠══════════════════════════════════════════════╣\n");
 	for (i=0; i < N_CHARS; i++)
 		
 		if (code_exists(codewords[i])){
@@ -170,11 +173,13 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 			
 			str_bin_num = convert_dec_to_bin(code, n_bits);
 			
-			printf("║%-5d | %-5d | %-10s <-> %-5d | %-5d║\n", 
-				     i, freq_table[i], str_bin_num, code, n_bits);
+			fprintf(fp, "║%-5d | %-5d | %-10s <-> %-5d | %-5d║\n", 
+				           i, freq_table[i], str_bin_num, code, n_bits);
 
 			free(str_bin_num);
 		}
+	
+	fclose(fp);
 }
 
 void assign_codes(Heap_Node *root, int *buffer, int b_index, Code_Word *codewords){
