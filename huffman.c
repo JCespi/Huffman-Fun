@@ -4,7 +4,6 @@
 #include "huffman.h"
 
 //Macros
-#define INTERNAL_NODE_MARKER '$'
 #define N_INFO_SECTS 4
 #define TOP_BAR 1
 #define MID_BAR 2
