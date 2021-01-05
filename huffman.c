@@ -4,6 +4,10 @@
 
 //Macros
 #define INTERNAL_NODE_MARKER '$'
+#define N_INFO_SECTS 4
+#define TOP_BAR 1
+#define MID_BAR 2
+#define BOT_BAR 3
 #define EFFICIENT 1
 
 //=================Huffman-Specific_Node========================
@@ -96,20 +100,73 @@ float find_avg_len(Code_Word *codewords){
 		return (num_sum) / denom;
 }
 
+void print_pretty_bar(FILE *fp, unsigned *lens, int n_lens, int position){
+	unsigned i, j, tot_hor_len;
+	char *l_ch, *r_ch, *div_ch, *hor_ch;
+		
+	//assign appropriate box characters
+	hor_ch = "═";
+	if (position == TOP_BAR){
+		l_ch   = "╔";
+		r_ch   = "╗";
+		div_ch = "╦";
+	} else if (position == MID_BAR){
+		l_ch   = "╠";
+		r_ch   = "╣";
+		div_ch = "╩";
+	} else if (position == BOT_BAR){
+		l_ch   = "╚";
+		r_ch   = "╝";
+		div_ch = "╬";
+	} else
+		return;
+
+	//first char
+	fprintf(fp, "%s", l_ch);
+
+	//add marks at each of the specified points (cumulative)
+	tot_hor_len = lens[n_lens - 1];
+
+	for (i=0; i < tot_hor_len; i++)
+		for (j=0; j < n_lens; j++){
+			if (i == lens[j]){
+				fprintf(fp, "%s", div_ch);
+				break;
+			} else
+				fprintf(fp, "%s", hor_ch);
+		}	
+
+	//last char
+	fprintf(fp, "%s\n", r_ch);
+}
+
 //dumps letter|frequency|code(2)|code(10)|n_bits to a file
 void dump_input_info(Code_Word *codewords, unsigned *freq_table){
-	unsigned code, n_bits, i;
+	unsigned code, n_bits, i, *section_lens, acc_len;
 	char *str_bin_num;
 	FILE *fp;
 
-	fp = fopen("info.txt", "w");
-	
+	//open the file to dump tree into
+	fp = fopen("info", "w");
+
+	//create section lengths
+	section_lens = calloc(N_INFO_SECTS, sizeof(int));
+	section_lens[0] = 5;
+	section_lens[1] = 5;
+	section_lens[2] = 10;
+	section_lens[3] = 5;
+	//turn the array into an accumulative array
+	for (i=0, acc_len=0; i < N_INFO_SECTS; i++)
+		acc_len += section_lens[i];
+
+
 	fprintf(fp, "Average Length of codewords = %0.2f\n", find_avg_len(codewords));
-	fprintf(fp, "╔═══════╦═════╦══════════╦═════╦════════════════╗\n");
+
+	print_pretty_bar(fp, section_lens, N_INFO_SECTS, TOP_BAR);
 	fprintf(fp, "║%-5s | %-5s | %-10s | %-5s║\n", "Letter", "Freq", "Codeword", "N_bits");
-	fprintf(fp, "╠══════════════════════════════════════════════╣\n");
-	for (i=0; i < N_CHARS; i++)
-		
+	print_pretty_bar(fp, section_lens, N_INFO_SECTS, MID_BAR);
+
+	for (i=0; i < N_CHARS; i++){
 		if (code_exists(codewords[i])){
 			n_bits = codewords[i].n_bits;
 			code = codewords[i].code_d;
@@ -121,7 +178,11 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 
 			free(str_bin_num);
 		}
+	}
+		
+	print_pretty_bar(fp, section_lens, N_INFO_SECTS, BOT_BAR);
 	
+	free(section_lens);
 	fclose(fp);
 }
 
