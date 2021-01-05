@@ -182,8 +182,8 @@ void print_pretty_row(FILE *fp, unsigned *lens, int n_lens, unsigned *data){
 
 	vert_ch = "║";
 
-	fprintf(fp, "%s", vert_ch);
 	for (i=0; i < lens[n_lens - 1]; i++){
+		fprintf(fp, "%s", vert_ch);
 		col_len = lens[i];
 
 		if (i != 2){
@@ -261,7 +261,7 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 			code = codewords[i].code_d;
 			
 			data[0] = i; data[1] = freq_table[i]; data[2] = code; data[3] = n_bits;
-			print_pretty_row(fp, a_section_lens, N_INFO_SECTS, data);
+			print_pretty_row(fp, section_lens, N_INFO_SECTS, data);
 		}
 	}
 	print_pretty_bar(fp, a_section_lens, N_INFO_SECTS, BOT_BAR);
