@@ -10,13 +10,13 @@
  * write a decoder that uses the data structure thought up ^^ there to decode
  * check for memory leaks by compiling on the zoo
  * add bit fields
- * write code in encode to copy stdin to a temporary file
  * add error handling to main()
  * maybe make a main.c that has the main() that calls on encode and decode (defined in some .h)
  * add a little function that prints a frequency plot
  * write a print function in huffman.c that dumps following info into a given file:
  *          - letter : frequency : codeword (binary) : codeword (decimal) : num of bits
  *          - put the box-drawing code in its own box.c and box.h files 
+ *          - make it general (linked list of void pointers, everything is turned into a string)
 */
 
 //start of a function to reduce magnitudes of frequencies (why though?)
