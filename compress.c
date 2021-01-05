@@ -31,6 +31,18 @@ void squish_freqs(unsigned *freq_table){
         freq_table[i] /= small_freq;
 }
 
+//a high bit followed by a byte signifies a leaf node with following letter
+void send_huff_tree(Heap_Node *root){
+    if (is_leaf(root)){
+        put_bits(1, ONE_BIT);
+        put_bits(8, root->letter);
+    } else {
+        put_bits(1, ZERO_BIT);
+        send_huff_tree(root->left);
+        send_huff_tree(root->right);
+    }
+}
+
 void encode(void){
     Heap_Node *root;
     Code_Word *codewords;
@@ -45,6 +57,9 @@ void encode(void){
     //create the huffman code
     codewords = create_huffman_code(&root, freq_table, 1);
 
+    //send the huffman tree
+    send_huff_tree(root);
+
     //rewind stdin
     rewind(stdin);
 
@@ -56,6 +71,10 @@ void encode(void){
     free_huffman_tree(root);
     free(freq_table);
     free(codewords);
+}
+
+Heap_Node *receive_huff_tree(Heap_Node *root){
+    ;
 }
 
 void decode(void){
