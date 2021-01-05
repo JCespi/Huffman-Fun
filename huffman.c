@@ -6,7 +6,7 @@
 #define INTERNAL_NODE_MARKER '$'
 #define EFFICIENT 1
 
-//=============================================================
+//=================Huffman-Specific_Node========================
 //comparator function to be used for heap creation and extraction
 int comparator(const void *node1, const void *node2){
 	if (EFFICIENT)
@@ -15,6 +15,7 @@ int comparator(const void *node1, const void *node2){
 		return (((Heap_Node*)node2)->freq - ((Heap_Node*)node1)->freq);
 }
 
+//returns a node with the given parameters. user's responsibility to free
 Heap_Node *create_huff_node(char letter, unsigned int freq){
 	Heap_Node *new_node;
 
@@ -26,61 +27,12 @@ Heap_Node *create_huff_node(char letter, unsigned int freq){
 	return new_node;	
 }
 
+//determines whether the node has a letter/is a leaf
 int is_leaf(Heap_Node *node){
 	return !(node->left) && !(node->right);
 }
-//=============================================================
-Heap *create_and_build_heap(unsigned *freq_table){
-	Heap *min_heap;
-	int i, f, n_used_chars;
 
-	n_used_chars = 0;
-
-	//find the number of used characters to create approp. sized heap
-	for (i=0; i < N_CHARS; i++)
-		if (freq_table[i])
-			n_used_chars++;
-			
-	if ((min_heap = create_heap(n_used_chars)) == NULL)
-		return NULL;
-
-	//iterate through entire freq table, but only add used chars to heap
-	for (i = 0, f = 0; f < N_CHARS; f++)
-		if (freq_table[f])
-			min_heap->array[i++] = create_huff_node(f, freq_table[f]);
-	
-	min_heap->size = n_used_chars;
-	build_heap(min_heap, comparator);
-
-	return min_heap;
-}
-
-Heap_Node *build_huffman_tree(unsigned *freq_table){
-	Heap_Node *left_node, *top_node, *right_node, *root_node;
-	Heap *min_heap;
-	unsigned int combined_freq;
-
-	if ((min_heap = create_and_build_heap(freq_table)) == NULL)
-		return NULL;
-
-	while (!has_one_element(min_heap)){
-		left_node  = (Heap_Node*)extract_min(min_heap, comparator);
-		right_node = (Heap_Node*)extract_min(min_heap, comparator);
-
-		combined_freq = left_node->freq + right_node->freq;
-		top_node = create_huff_node(INTERNAL_NODE_MARKER, combined_freq);
-		top_node->left = left_node;
-		top_node->right = right_node;
-
-		insert_new_node(min_heap, (void*)top_node, comparator);
-	}
-
-	root_node = min_heap->array[0];			    //extract the huffman tree
-	free_min_heap(min_heap);					//free min heap container
-
-	return root_node;
-}
-
+//=================Huffman-Related_Info=========================
 //given an array representing a binary number, computes the decimal equivalent
 unsigned convert_bin_to_dec(int *bit_array, int last_index){
 	unsigned i, decimal_output, multiplier;
@@ -173,6 +125,58 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	fclose(fp);
 }
 
+//=================Huffman-Construction=========================
+Heap *create_and_build_heap(unsigned *freq_table){
+	Heap *min_heap;
+	int i, f, n_used_chars;
+
+	n_used_chars = 0;
+
+	//find the number of used characters to create approp. sized heap
+	for (i=0; i < N_CHARS; i++)
+		if (freq_table[i])
+			n_used_chars++;
+			
+	if ((min_heap = create_heap(n_used_chars)) == NULL)
+		return NULL;
+
+	//iterate through entire freq table, but only add used chars to heap
+	for (i = 0, f = 0; f < N_CHARS; f++)
+		if (freq_table[f])
+			min_heap->array[i++] = create_huff_node(f, freq_table[f]);
+	
+	min_heap->size = n_used_chars;
+	build_heap(min_heap, comparator);
+
+	return min_heap;
+}
+
+Heap_Node *build_huffman_tree(unsigned *freq_table){
+	Heap_Node *left_node, *top_node, *right_node, *root_node;
+	Heap *min_heap;
+	unsigned int combined_freq;
+
+	if ((min_heap = create_and_build_heap(freq_table)) == NULL)
+		return NULL;
+
+	while (!has_one_element(min_heap)){
+		left_node  = (Heap_Node*)extract_min(min_heap, comparator);
+		right_node = (Heap_Node*)extract_min(min_heap, comparator);
+
+		combined_freq = left_node->freq + right_node->freq;
+		top_node = create_huff_node(INTERNAL_NODE_MARKER, combined_freq);
+		top_node->left = left_node;
+		top_node->right = right_node;
+
+		insert_new_node(min_heap, (void*)top_node, comparator);
+	}
+
+	root_node = min_heap->array[0];			    //extract the huffman tree
+	free_min_heap(min_heap);					//free min heap container
+
+	return root_node;
+}
+
 void assign_codes(Heap_Node *root, int *buffer, int b_index, Code_Word *codewords){
 	if (!root)
 		return;
@@ -251,4 +255,4 @@ void free_huffman_tree(Heap_Node *root){
 		free(root);
 	}
 }
-//=============================================================
+//==============================================================
