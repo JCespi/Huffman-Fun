@@ -161,7 +161,7 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 
 	fp = fopen("info.txt", "w");
 	
-	printf("Average Length of codewords = %0.2f\n", find_avg_len(codewords));
+	fprintf(fp, "Average Length of codewords = %0.2f\n", find_avg_len(codewords));
 	fprintf(fp, "╔═══════╦═════╦══════════╦═════╦════════════════╗\n");
 	fprintf(fp, "║%-5s | %-5s | %-10s | %-5s║\n", "Letter", "Freq", "Codeword", "N_bits");
 	fprintf(fp, "╠══════════════════════════════════════════════╣\n");
