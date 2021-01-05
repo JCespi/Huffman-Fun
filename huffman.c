@@ -159,7 +159,9 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	char *str_bin_num;
 	
 	printf("Average Length of codewords = %0.2f\n", find_avg_len(codewords));
-	printf("Letter | Frequency | Code (2) | Code (10) | Num of Bits\n");
+	printf("╔═══════╦═════╦══════════╦═════╦════════════════╗\n");
+	printf("║%-5s | %-5s | %-10s | %-5s║\n", "Letter", "Freq", "Codeword", "N_bits");
+	printf("╠══════════════════════════════════════════════╣\n");
 	for (i=0; i < N_CHARS; i++)
 		
 		if (code_exists(codewords[i])){
@@ -168,7 +170,7 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 			
 			str_bin_num = convert_dec_to_bin(code, n_bits);
 			
-			printf("%c | %d | %s | %d | %d\n", 
+			printf("║%-5d | %-5d | %-10s <-> %-5d | %-5d║\n", 
 				     i, freq_table[i], str_bin_num, code, n_bits);
 
 			free(str_bin_num);
