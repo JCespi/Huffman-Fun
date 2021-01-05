@@ -81,15 +81,6 @@ Heap_Node *build_huffman_tree(unsigned *freq_table){
 	return root_node;
 }
 
-void print_arr(int *arr, int n){ 
-    int i; 
-
-    for (i = 0; i < n; ++i) 
-        printf("%d", arr[i]); 
-  
-    printf("\n"); 
-}
-
 //given an array representing a binary number, computes the decimal equivalent
 unsigned convert_bin_to_dec(int *bit_array, int last_index){
 	unsigned i, decimal_output, multiplier;
