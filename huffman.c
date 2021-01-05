@@ -262,6 +262,7 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 			
 			data[0] = i; data[1] = freq_table[i]; data[2] = code; data[3] = n_bits;
 			print_pretty_row(fp, section_lens, N_INFO_SECTS, data);
+			print_pretty_bar(fp, a_section_lens, N_INFO_SECTS, MID_BAR);
 		}
 	}
 	print_pretty_bar(fp, a_section_lens, N_INFO_SECTS, BOT_BAR);
