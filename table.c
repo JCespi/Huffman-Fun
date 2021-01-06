@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include "table.h"
 
@@ -118,15 +119,15 @@ unsigned n_digits(unsigned num){
 }
 
 int print_pretty_row(char **col_names){
-	unsigned i, col_len, entry_len;
 	char *vert_ch;
+	int i;
 
 	if (!out_ptr || !col_names)
 		return FAILURE;
 
 	vert_ch = "║";
 
-	for (i=0; i < col_lens; i++){
+	for (i=0; i < n_cols; i++){
 		fprintf(out_ptr, "%s", vert_ch);
 		pretty_row_helper(col_lens[i], col_names[i]);
 	}
