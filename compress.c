@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "compress.h";
+#include "compress.h"
 
 /* TO-DO
  * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
