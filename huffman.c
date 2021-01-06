@@ -85,7 +85,7 @@ char *convert_dec_to_bin(unsigned decimal_n, unsigned n_bits){
 
 //used to interface with functions in table.h to produce a table
 void dump_input_info(Code_Word *codewords, unsigned *freq_table){
-	unsigned i, n_cols;
+	unsigned i, j, n_cols;
 	char **row_strs;
 	FILE *fp;
 
@@ -111,14 +111,18 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	//use table functions to print the rows
 	for (i=0; i < N_CHARS; i++){
 		if (code_exists(codewords[i])){
-			row_strs[0] = atoi(i);
-			row_strs[1] = atoi(freq_table[i]);
+			//generate strings and place in buffer
+			asprintf(&row_strs[0], "%d", i);
+			asprintf(&row_strs[1], "%d", freq_table[i]);
 			row_strs[2] = convert_dec_to_bin(codewords[i].code_d, codewords[i].n_bits);
-			row_strs[3] = atoi(codewords[i].n_bits);
+			 asprintf(&row_strs[3], "%d", codewords[i].n_bits);
 
-			print_pretty_row(NULL);
+			//print the string array using table.h
+			print_pretty_row(row_strs);
 
-			free(row_strs[2]);
+			//free the recently created strings
+			for (j=0; j < n_cols; j++)
+				free(row_strs[j]);
 		}
 	}
 
