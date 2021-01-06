@@ -65,6 +65,9 @@ void encode(void){
     while ((ch = getchar()) != EOF)
         put_bits(codewords[ch].n_bits, codewords[ch].code_d);
 
+    //flush any bits caught in buffer
+    flush_bits();
+
     //free the tree, the codeword table, and the frequency table
     free_huffman_tree(root);
     free(freq_table);
@@ -86,13 +89,23 @@ Heap_Node *receive_huff_tree(void){
 }
 
 void decode(void){
-    Heap_Node *root;
+    Heap_Node *root, *ptr;
+    long bit;
 
     root = receive_huff_tree();
+    ptr = root;
     
-    //while (c = get_bit_input())
-    //      char = trace_through_tree <- difficult b/c happens bit by bit
-    //      output char 
+    while ((bit = get_bits(1)) != EOF){
+        //move the pointer appropriately
+        ptr = (bit == ZERO_BIT) ? ptr->left : ptr->right;
+
+        //a leaf node (a letter) found
+        if (is_leaf(ptr)){
+            putchar(ptr->letter);
+            ptr = root; //reset to root of tree
+        }
+    }
+
     free_huffman_tree(root);
 }
 
