@@ -1,7 +1,14 @@
-//Macros
-#define N_INFO_SECTS 4
-#define TOP_BAR 1
-#define MID_BAR 2
-#define BOT_BAR 3
+//given a FILE*, writes table to that file.
+void set_dump_file(FILE *fp);
 
-void dump_input_info(Code_Word *codewords, unsigned *freq_table);
+//given an array of column lengths and n_cols, saves info for future functions
+void set_col_lens(unsigned *col_lens, unsigned n_cols);
+
+//returns 1 on success. 0 on failure
+int print_pretty_header(char **col_names);
+
+//returns 1 on success. 0 on failure
+int print_pretty_row(char **col_names);  
+
+//returns 1 on success. 0 on failure
+int print_pretty_footer();
