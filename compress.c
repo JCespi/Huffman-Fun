@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "huffman.h"
-#include "transmit.h"
+#include "compress.h";
 
 /* TO-DO
  * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
@@ -44,7 +43,7 @@ void send_huff_tree(Heap_Node *root){
 }
 
 //read file to form frequency table, generate huffman code and tree, send tree and codewords
-void encode(void){
+void encode(int dump){
     Heap_Node *root;
     Code_Word *codewords;
     unsigned *freq_table, ch;
@@ -56,7 +55,7 @@ void encode(void){
         freq_table[ch]++;
 
     //create the huffman code
-    codewords = create_huffman_code(&root, freq_table, 1);
+    codewords = create_huffman_code(&root, freq_table, dump);
 
     //send the huffman tree
     send_huff_tree(root);
@@ -115,16 +114,30 @@ void decode(void){
 
 int main(int argc, char **argv){
     char *path, *exectuable;
+    int i, dump;
     
     //get executable name
     path = argv[0];
     exectuable = &path[strlen(path) - 6];
 
     if (strcmp("decode", exectuable) == 0){
+        if (argc > 1)
+            DIE("%s", "decode: accepts no options");
+
         decode();
     } else {
+        dump = 0;   //default dump option is false
+        i = 1;
 
-        encode();
+        while (i < argc){
+            if (strcmp(argv[i], "-d") == 0){
+                dump = 1;
+                i++;
+            } else 
+                DIE("%s", "encode: unknown flag");
+        }
+
+        encode(dump);
     }
 
     return 0;
