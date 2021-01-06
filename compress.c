@@ -8,6 +8,8 @@
  * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
  * check for memory leaks by compiling on the zoo
  * add bit fields
+ * add more detailed comments to header file functions. (@param, @return)
+ * add function to find percentage of compression
  * add error handling to main()
  * maybe make a main.c that has the main() that calls on encode and decode (defined in some .h)
  * add a little function that prints a frequency plot
