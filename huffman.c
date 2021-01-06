@@ -129,7 +129,7 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	free(row_strs);
 
 	//close dump file
-	flose(fp);
+	fclose(fp);
 }
 //=================Huffman-Construction=========================
 Heap *create_and_build_heap(unsigned *freq_table){
