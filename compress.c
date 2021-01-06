@@ -41,6 +41,7 @@ void send_huff_tree(Heap_Node *root){
     }
 }
 
+//read file to form frequency table, generate huffman code and tree, send tree and codewords
 void encode(void){
     Heap_Node *root;
     Code_Word *codewords;
@@ -88,6 +89,7 @@ Heap_Node *receive_huff_tree(void){
     }
 }
 
+//read the huffman tree, read codewords and output corresponding letters
 void decode(void){
     Heap_Node *root, *ptr;
     long bit;
