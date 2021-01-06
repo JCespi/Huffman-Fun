@@ -30,8 +30,5 @@ int is_leaf(Heap_Node *node);
 //fills in root argument and returns array of codewords
 Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_flag);
 
-//given a codeword node, determines whether that codeword exists
-int code_exists(Code_Word codeword);
-
 //frees the huffman tree
 void free_huffman_tree(Heap_Node *root);
