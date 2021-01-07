@@ -58,6 +58,21 @@ float find_avg_len(Code_Word *codewords){
 		return (num_sum) / denom;
 }
 
+//given a character returns string. user's responsibility to free
+char *convert_letter_to_str(char ch){
+	char *str_buffer;
+
+	if (ch == '\n'){
+		asprintf(&str_buffer, "\\n");
+	} else if (ch == '\t'){
+		asprintf(&str_buffer, "\\t");
+	} else {
+		asprintf(&str_buffer, "%c", ch);
+	}
+	
+	return str_buffer;
+}
+
 //given a decimal number and a num of bits, returns (str) binary number equivalent
 char *convert_dec_to_bin(unsigned decimal_n, unsigned n_bits){
 	int i;
@@ -112,7 +127,7 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	for (i=0; i < N_CHARS; i++){
 		if (code_exists(codewords[i])){
 			//generate strings and place in buffer
-			asprintf(&row_strs[0], "%d", i);
+			row_strs[0] = convert_letter_to_str(i);
 			asprintf(&row_strs[1], "%d", freq_table[i]);
 			row_strs[2] = convert_dec_to_bin(codewords[i].code_d, codewords[i].n_bits);
 			asprintf(&row_strs[3], "%d", codewords[i].code_d);
