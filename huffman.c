@@ -86,7 +86,7 @@ char *convert_dec_to_bin(unsigned decimal_n, unsigned n_bits){
 //used to interface with functions in table.h to produce a table
 void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	unsigned i, j, n_cols;
-	char **row_strs;
+	char **row_strs, *str_buffer;
 	FILE *fp;
 
 	//open file to dump table to
@@ -99,7 +99,8 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	set_col_lens(col_lens, n_cols);
 
 	//print the average length of a code
-	fprintf(fp, "Average Length of codewords = %0.2f\n", find_avg_len(codewords));
+	asprintf(&str_buffer, "Average Length of codewords = %0.2f", find_avg_len(codewords));
+	print_pretty_centered(str_buffer);
 
 	//use table functions to print a title
 	char *col_titles[] = {"Letter", "Freq", "Code (2)", "Code (10)", "Nbits"};
@@ -131,6 +132,7 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	print_pretty_footer();
 
 	//free container(s)
+	free(str_buffer);
 	free(row_strs);
 
 	//close dump file
