@@ -15,3 +15,6 @@ int print_pretty_row(char **col_names, int separator);
 
 //returns 1 on success. 0 on failure
 int print_pretty_footer();
+
+//prints outside of the table but centered w/respect to the table
+int print_pretty_centered(char *str);

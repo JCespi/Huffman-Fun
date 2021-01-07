@@ -167,3 +167,17 @@ int print_pretty_footer(){
 	print_pretty_bar(BOT_BAR);
 	return SUCCESS;
 }
+
+int print_pretty_centered(char *str){
+	unsigned length_of_bar;
+
+	if (!out_ptr || !n_cols || !col_lens)
+		return FAILURE;
+
+	length_of_bar = total_row_len() + 2;
+	
+	pretty_row_helper(length_of_bar, str);
+	fprintf(out_ptr, "\n");
+	
+	return SUCCESS;
+}
