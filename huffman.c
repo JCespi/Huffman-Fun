@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "huffman.h"
-#include "table.h"
 
 //Macros
 #define EFFICIENT 1
@@ -58,86 +57,6 @@ float find_avg_len(Code_Word *codewords){
 		return (num_sum) / denom;
 }
 
-//given a decimal number and a num of bits, returns (str) binary number equivalent
-char *convert_dec_to_bin(unsigned decimal_n, unsigned n_bits){
-	int i;
-	unsigned bin_num[n_bits], j;
-	char *str_bin_num;
-
-	str_bin_num = calloc(n_bits + 1, sizeof(char));
-
-	//fill in the integer array "backwards"
-	for (i=0; decimal_n > 0; i++, decimal_n /= 2)
-		bin_num[i] = decimal_n % 2;
-	
-	//fill the rest of the array with 0's
-	for (; i < n_bits; i++)
-		bin_num[i] = ZERO_BIT;
-	
-	//fill the string representation
-	for (i=n_bits-1, j=0; i >= 0; i--, j++)
-		str_bin_num[j] = (bin_num[i]) ? '1' : '0';
-	
-	str_bin_num[n_bits] = '\0';
-	
-	return str_bin_num;
-}
-
-//used to interface with functions in table.h to produce a table
-void dump_input_info(Code_Word *codewords, unsigned *freq_table){
-	unsigned i, j, n_cols;
-	char **row_strs, *str_buffer;
-	FILE *fp;
-
-	//open file to dump table to
-	fp = fopen("table.txt", "w");
-
-	//use approrpiate setup functions for table
-	n_cols = 5;
-	unsigned col_lens[] = {8, 6, 10, 11, 7};
-	set_dump_file(fp);
-	set_col_lens(col_lens, n_cols);
-
-	//print the average length of a code
-	asprintf(&str_buffer, "Average Length of codewords = %0.2f", find_avg_len(codewords));
-	print_pretty_centered(str_buffer);
-
-	//use table functions to print a title
-	char *col_titles[] = {"Letter", "Freq", "Code (2)", "Code (10)", "Nbits"};
-	print_pretty_header(col_titles);
-
-	//container to hold the strs to be passed to table.h function
-	row_strs = malloc(sizeof(char*));
-
-	//use table functions to print the rows
-	for (i=0; i < N_CHARS; i++){
-		if (code_exists(codewords[i])){
-			//generate strings and place in buffer
-			row_strs[0] = convert_letter_to_str(i);
-			asprintf(&row_strs[1], "%d", freq_table[i]);
-			row_strs[2] = convert_dec_to_bin(codewords[i].code_d, codewords[i].n_bits);
-			asprintf(&row_strs[3], "%d", codewords[i].code_d);
-			asprintf(&row_strs[4], "%d", codewords[i].n_bits);
-
-			//print the string array using table.h
-			print_pretty_row(row_strs, 1);
-
-			//free the recently created strings
-			for (j=0; j < n_cols; j++)
-				free(row_strs[j]);
-		}
-	}
-
-	//print a footer to close the table
-	print_pretty_footer();
-
-	//free container(s)
-	free(str_buffer);
-	free(row_strs);
-
-	//close dump file
-	fclose(fp);
-}
 //=================Huffman-Construction=========================
 Heap *create_and_build_heap(unsigned *freq_table){
 	Heap *min_heap;
@@ -241,7 +160,7 @@ unsigned int get_huff_tree_height(Heap_Node *root){
 	}
 }
 
-Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_flag){
+Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table){
 	int *bit_buffer, b_index;
 	Code_Word *codewords;
 	Heap_Node *huff_tree;
@@ -260,10 +179,6 @@ Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_fla
 	//fill in the array of code word structs
 	assign_codes(huff_tree, bit_buffer, b_index, codewords);
 	
-	//print info on input and average code length if appropriate
-	if (p_flag)
-		dump_input_info(codewords, freq_table);
-
 	//free the buffer used to store bits
 	free(bit_buffer);
 

@@ -27,8 +27,11 @@ Heap_Node *create_huff_node(char letter, unsigned int freq);
 //determines whether the node has a letter/is a leaf
 int is_leaf(Heap_Node *node);
 
+//finds the average length of the code
+float find_avg_len(Code_Word *codewords);
+
 //fills in root argument and returns array of codewords
-Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table, int p_flag);
+Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table);
 
 //frees the huffman tree
 void free_huffman_tree(Heap_Node *root);

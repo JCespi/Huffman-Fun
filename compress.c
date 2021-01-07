@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "compress.h"
+#include "table.h"
 
 /* TO-DO
  * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
@@ -41,6 +42,62 @@ void send_huff_tree(Heap_Node *root){
     }
 }
 
+//used to interface with functions in table.h to produce a table
+void dump_input_info(Code_Word *codewords, unsigned *freq_table){
+	unsigned i, j, n_cols;
+	char **row_strs, *str_buffer;
+	FILE *fp;
+
+	//open file to dump table to
+	fp = fopen("table.txt", "w");
+
+	//use approrpiate setup functions for table
+	n_cols = 5;
+	unsigned col_lens[] = {8, 6, 10, 11, 7};
+	set_dump_file(fp);
+	set_col_lens(col_lens, n_cols);
+
+	//print the average length of a code
+	asprintf(&str_buffer, "Average Length of codewords = %0.2f", find_avg_len(codewords));
+	print_pretty_centered(str_buffer);
+
+	//use table functions to print a title
+	char *col_titles[] = {"Letter", "Freq", "Code (2)", "Code (10)", "Nbits"};
+	print_pretty_header(col_titles);
+
+	//container to hold the strs to be passed to table.h function
+	row_strs = malloc(sizeof(char*));
+
+	//use table functions to print the rows
+	for (i=0; i < N_CHARS; i++){
+		if (codewords[i].n_bits){
+			//generate strings and place in buffer
+			row_strs[0] = convert_letter_to_str(i);
+			asprintf(&row_strs[1], "%d", freq_table[i]);
+			row_strs[2] = convert_dec_to_bin(codewords[i].code_d, codewords[i].n_bits);
+			asprintf(&row_strs[3], "%d", codewords[i].code_d);
+			asprintf(&row_strs[4], "%d", codewords[i].n_bits);
+
+			//print the string array using table.h
+			print_pretty_row(row_strs, 1);
+
+			//free the recently created strings
+			for (j=0; j < n_cols; j++)
+				free(row_strs[j]);
+		}
+	}
+
+	//print a footer to close the table
+	print_pretty_footer();
+
+	//free container(s)
+	free(str_buffer);
+	free(row_strs);
+
+	//close dump file
+	fclose(fp);
+}
+
 //read file to form frequency table, generate huffman code and tree, send tree and codewords
 void encode(int dump){
     Heap_Node *root;
@@ -54,10 +111,14 @@ void encode(int dump){
         freq_table[ch]++;
 
     //create the huffman code
-    codewords = create_huffman_code(&root, freq_table, dump);
+    codewords = create_huffman_code(&root, freq_table);
 
     //send the huffman tree
     send_huff_tree(root);
+
+    //dump the tree by eating the tree
+    if (dump)
+        dump_input_info(codewords, freq_table);
 
     //rewind stdin
     rewind(stdin);
