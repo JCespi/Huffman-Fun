@@ -131,6 +131,9 @@ char *convert_dec_to_bin(unsigned decimal_n, unsigned n_bits){
 	unsigned bin_num[n_bits], j;
 	char *str_bin_num;
 
+	if (!n_bits)
+		return NULL;
+
 	str_bin_num = calloc(n_bits + 1, sizeof(char));
 
 	//fill in the integer array "backwards"
