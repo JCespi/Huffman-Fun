@@ -18,7 +18,6 @@
  * add a little function that prints a frequency plot
  * for dumping the table:
  *      - handle multiple sources of redirection with a default
- *      - print the table in an order (maybe smallest codes to longest codes) 
  *      - add functions to find appropriate sizes for column widths
  *      - change stack memory to heap memory for column widths AND column titles
 */
@@ -106,15 +105,19 @@ void dump_input_info(Heap_Node *root, Code_Word *codewords, unsigned *freq_table
 	print_pretty_header(col_titles);
 
     //perform a bfs and use table functions to print the rows in order of n_bits
-    queue = create_queue();
-    min_node = root;
+    queue = create_queue();         //create queue
+    enqueue(queue, (void*)root);    //initialize it with the root
 
-    while (min_node){
-        process_node(min_node, codewords, n_cols);
-        enqueue(queue, (void*)(min_node->left));
-        enqueue(queue, (void*)(min_node->right));
-
+    while (!is_empty(queue)){
         min_node = (Heap_Node*)dequeue(queue);
+
+        process_node(min_node, codewords, n_cols);
+
+        if (min_node->left)
+            enqueue(queue, (void*)(min_node->left));
+
+        if (min_node->right)
+            enqueue(queue, (void*)(min_node->right));
     }
 
 	//print a footer to close the table
