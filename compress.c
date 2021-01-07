@@ -16,6 +16,8 @@
  * for dumping the table:
  *      - handle multiple sources of redirection with a default
  *      - print the table in an order (maybe smallest codes to longest codes) 
+ *      - add functions to find appropriate sizes for column widths
+ *      - change stack memory to heap memory for column widths AND column titles
 */
 
 //start of a function to reduce magnitudes of frequencies (why though?)
@@ -43,9 +45,10 @@ void send_huff_tree(Heap_Node *root){
 }
 
 //used to interface with functions in table.h to produce a table
-void dump_input_info(Code_Word *codewords, unsigned *freq_table){
-	unsigned i, j, n_cols;
-	char **row_strs, *str_buffer;
+void dump_input_info(Heap_Node *root, Code_Word *codewords, unsigned *freq_table){
+	unsigned i, j, n_cols, freq, code, n_bits;
+	char **row_strs, *str_buffer, letter;
+    Heap_Node *min_node;
 	FILE *fp;
 
 	//open file to dump table to
@@ -68,24 +71,32 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	//container to hold the strs to be passed to table.h function
 	row_strs = malloc(sizeof(char*));
 
-	//use table functions to print the rows
-	for (i=0; i < N_CHARS; i++){
-		if (codewords[i].n_bits){
-			//generate strings and place in buffer
-			row_strs[0] = convert_letter_to_str(i);
-			asprintf(&row_strs[1], "%d", freq_table[i]);
-			row_strs[2] = convert_dec_to_bin(codewords[i].code_d, codewords[i].n_bits);
-			asprintf(&row_strs[3], "%d", codewords[i].code_d);
-			asprintf(&row_strs[4], "%d", codewords[i].n_bits);
+    //keep on extracting nodes from the heap and use table functions to print the rows
+    while (root){
+        min_node = pop_min(root);
+        
+        if (!is_internal(min_node)){
+            //generate data to be converted to strings
+            letter = min_node->letter;
+            freq = min_node->freq;
+            code = codewords[letter].code_d;
+            n_bits = codewords[letter].n_bits;
+            
+            //place data into buffer to use table function
+            row_strs[0] = convert_letter_to_str(letter);
+            asprintf(&row_strs[1], "%d", freq);
+            row_strs[2] = convert_dec_to_bin(code, n_bits);
+            asprintf(&row_strs[3], "%d", code);
+            asprintf(&row_strs[4], "%d", n_bits);
 
-			//print the string array using table.h
+            //print the string array using table.h
 			print_pretty_row(row_strs, 1);
 
-			//free the recently created strings
+            //free the recently created strings
 			for (j=0; j < n_cols; j++)
 				free(row_strs[j]);
-		}
-	}
+        }
+    }
 
 	//print a footer to close the table
 	print_pretty_footer();
@@ -118,7 +129,7 @@ void encode(int dump){
 
     //dump the tree by eating the tree
     if (dump)
-        dump_input_info(codewords, freq_table);
+        dump_input_info(root, codewords, freq_table);
 
     //rewind stdin and transmit the codewords
     rewind(stdin);
