@@ -12,7 +12,9 @@
  * add error handling to main()
  * maybe make a main.c that has the main() that calls on encode and decode (defined in some .h)
  * add a little function that prints a frequency plot
- * write code to handle printing characters themselves. handle diff sources of redirection
+ * for dumping the table:
+ *      - handle multiple sources of redirection with a default
+ *      - print the table in an order (maybe smallest codes to longest codes) 
 */
 
 //start of a function to reduce magnitudes of frequencies (why though?)
