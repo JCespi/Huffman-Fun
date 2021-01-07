@@ -8,7 +8,7 @@ void set_col_lens(unsigned *col_lens, unsigned n_cols);
 int print_pretty_header(char **col_names);
 
 //returns 1 on success. 0 on failure
-int print_pretty_row(char **col_names);  
+int print_pretty_row(char **col_names, int separator);  
 
 //returns 1 on success. 0 on failure
 int print_pretty_footer();
