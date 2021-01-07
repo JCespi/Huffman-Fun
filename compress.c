@@ -47,11 +47,45 @@ void send_huff_tree(Heap_Node *root){
     }
 }
 
+//helper function that uses table print functions
+void process_node(Heap_Node *node, Code_Word *codewords, unsigned n_cols){
+    unsigned i, freq, code, n_bits;
+    char letter, **row_strs;
+
+    //container to hold the strs to be passed to table.h function
+	row_strs = malloc(sizeof(char*) * n_cols);
+
+    if (is_leaf(node)){
+        //generate data to be converted to strings
+        letter = node->letter;
+        freq = node->freq;
+        code = codewords[(int)letter].code_d;
+        n_bits = codewords[(int)letter].n_bits;
+        
+        //place data into buffer to use table function
+        row_strs[0] = convert_letter_to_str(letter);
+        asprintf(&row_strs[1], "%d", freq);
+        row_strs[2] = convert_dec_to_bin(code, n_bits);
+        asprintf(&row_strs[3], "%d", code);
+        asprintf(&row_strs[4], "%d", n_bits);
+
+        //print the string array using table.h
+        print_pretty_row(row_strs, 1);
+
+        //free the recently created strings
+        for (i=0; i < n_cols; i++)
+            free(row_strs[i]);
+    }
+
+    free(row_strs);
+}
+
 //used to interface with functions in table.h to produce a table
 void dump_input_info(Heap_Node *root, Code_Word *codewords, unsigned *freq_table){
-	unsigned i, j, n_cols, freq, code, n_bits;
-	char **row_strs, *str_buffer, letter;
+	unsigned n_cols;
+	char *str_buffer;
     Heap_Node *min_node;
+    Queue *queue;
 	FILE *fp;
 
 	//open file to dump table to
@@ -71,42 +105,24 @@ void dump_input_info(Heap_Node *root, Code_Word *codewords, unsigned *freq_table
 	char *col_titles[] = {"Letter", "Freq", "Code (2)", "Code (10)", "Nbits"};
 	print_pretty_header(col_titles);
 
-	//container to hold the strs to be passed to table.h function
-	row_strs = malloc(sizeof(char*));
+    //perform a bfs and use table functions to print the rows in order of n_bits
+    queue = create_queue();
+    min_node = root;
 
-    //keep on extracting nodes from the heap and use table functions to print the rows
-    while (root){
-        min_node = pop_min(root);
-        
-        if (!is_internal(min_node)){
-            //generate data to be converted to strings
-            letter = min_node->letter;
-            freq = min_node->freq;
-            code = codewords[letter].code_d;
-            n_bits = codewords[letter].n_bits;
-            
-            //place data into buffer to use table function
-            row_strs[0] = convert_letter_to_str(letter);
-            asprintf(&row_strs[1], "%d", freq);
-            row_strs[2] = convert_dec_to_bin(code, n_bits);
-            asprintf(&row_strs[3], "%d", code);
-            asprintf(&row_strs[4], "%d", n_bits);
+    while (min_node){
+        process_node(min_node, codewords, n_cols);
+        enqueue(queue, (void*)(min_node->left));
+        enqueue(queue, (void*)(min_node->right));
 
-            //print the string array using table.h
-			print_pretty_row(row_strs, 1);
-
-            //free the recently created strings
-			for (j=0; j < n_cols; j++)
-				free(row_strs[j]);
-        }
+        min_node = (Heap_Node*)dequeue(queue);
     }
 
 	//print a footer to close the table
 	print_pretty_footer();
 
 	//free container(s)
+    free_queue(queue);
 	free(str_buffer);
-	free(row_strs);
 
 	//close dump file
 	fclose(fp);
