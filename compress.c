@@ -120,10 +120,8 @@ void encode(int dump){
     if (dump)
         dump_input_info(codewords, freq_table);
 
-    //rewind stdin
+    //rewind stdin and transmit the codewords
     rewind(stdin);
-
-    //transmit the codewords
     while ((ch = getchar()) != EOF)
         put_bits(codewords[ch].n_bits, codewords[ch].code_d);
 
