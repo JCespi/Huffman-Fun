@@ -25,16 +25,19 @@ void set_col_lens(unsigned *arr, unsigned n){
 }
 
 unsigned total_row_len(void){
-	unsigned total_len, i;
-
-	total_len = 0;
+	unsigned total_len, i, n_divs;
 
 	if (!n_cols || !col_lens)
-		return total_len;
+		return 0;
 	
+	total_len = 0;
+	n_divs = (n_cols - 1);
+
 	for (i=0; i < n_cols; i++){
 		total_len += col_lens[i];
 	}
+
+	total_len += n_divs;
 
 	return total_len;
 }
@@ -77,7 +80,7 @@ void print_pretty_bar(int position){
 		fprintf(out_ptr, "%s", (s == div_index) ? div_ch : hor_ch);
 
 		if (s == div_index)
-			div_index += col_lens[l++];
+			div_index += col_lens[l++] + 1;
 	}
 			
 	//last char and newline
@@ -105,7 +108,7 @@ void pretty_row_helper(unsigned col_len, char *str){
 	fprintf(out_ptr, "%s", str);
 
 	//right padding
-	for (i=l_pad+entry_len; i < r_pad; i++)
+	for (i=0; i < r_pad; i++)
 		fprintf(out_ptr, " ");	
 }
 
@@ -118,7 +121,7 @@ unsigned n_digits(unsigned num){
 	return count;
 }
 
-int print_pretty_row(char **col_names){
+int print_pretty_row(char **col_names, int separator){
 	char *vert_ch;
 	int i;
 
@@ -133,6 +136,9 @@ int print_pretty_row(char **col_names){
 	}
 
 	fprintf(out_ptr, "%s\n", vert_ch);
+	
+	if (separator)
+			print_pretty_bar(MID_BAR);
 
 	return SUCCESS;	
 }
@@ -144,8 +150,8 @@ int print_pretty_header(char **col_names){
 
 	//decorative bars surround the row of strs
 	print_pretty_bar(TOP_BAR);
-	print_pretty_row(col_names);
-	print_pretty_bar(BOT_BAR);
+	print_pretty_row(col_names, 0);
+	print_pretty_bar(MID_BAR);
 
 	return SUCCESS;
 }
