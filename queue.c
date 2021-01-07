@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "queue.h"
 
 //used to create a node in the queue
@@ -37,7 +38,7 @@ void *dequeue(Queue *queue){
     Q_Node *front_node;
 
     if (!queue)
-        return;
+        return NULL;
     
     front_node = queue->front;
     queue->front = queue->front->next;
@@ -46,7 +47,7 @@ void *dequeue(Queue *queue){
     if (!queue->front)
         queue->rear = NULL;
     
-    return front_node;
+    return front_node->key;
 }
 
 unsigned len(Queue *queue){
