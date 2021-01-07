@@ -20,6 +20,9 @@ void enqueue(Queue *queue, void *key);
 //removes and returns key at the front of the queue
 void *dequeue(Queue *queue);
 
+//returns whether the queue is empty
+unsigned is_empty(Queue *queue);
+
 //returns the number of items in the queue
 unsigned len(Queue *queue);
 

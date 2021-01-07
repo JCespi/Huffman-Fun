@@ -57,6 +57,12 @@ unsigned len(Queue *queue){
     return queue->len;
 }
 
+unsigned is_empty(Queue *queue){
+    if (!queue)
+        return 1;
+    return queue->len == 0;
+}
+
 void free_queue(Queue *queue){
     Q_Node *front, *temp;
 
