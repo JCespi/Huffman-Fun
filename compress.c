@@ -12,10 +12,7 @@
  * add error handling to main()
  * maybe make a main.c that has the main() that calls on encode and decode (defined in some .h)
  * add a little function that prints a frequency plot
- * write a print function in huffman.c that dumps following info into a given file:
- *          - letter : frequency : codeword (binary) : codeword (decimal) : num of bits
- *          - put the box-drawing code in its own box.c and box.h files 
- *          - make it general (linked list of void pointers, everything is turned into a string)
+ * write code to handle printing characters themselves. handle diff sources of redirection
 */
 
 //start of a function to reduce magnitudes of frequencies (why though?)
