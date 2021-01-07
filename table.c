@@ -12,8 +12,8 @@
 
 //Global variables
 FILE *out_ptr = NULL;	 //where to direct stdout
-unsigned n_cols = 0; //the number of columns
-unsigned *col_lens;  //array containing column widths
+unsigned n_cols = 0; 	 //the number of columns
+unsigned *col_lens;  	 //array containing column widths
 
 void set_dump_file(FILE *fp){
 	out_ptr = fp;
@@ -112,13 +112,18 @@ void pretty_row_helper(unsigned col_len, char *str){
 		fprintf(out_ptr, " ");	
 }
 
-unsigned n_digits(unsigned num){
-	unsigned count;
+char *convert_letter_to_str(char ch){
+	char *str_buffer;
 
-	for (count = 0; num != 0; count++)
-		num = num / 10;
+	if (ch == '\n'){
+		asprintf(&str_buffer, "\\n");
+	} else if (ch == '\t'){
+		asprintf(&str_buffer, "\\t");
+	} else {
+		asprintf(&str_buffer, "%c", ch);
+	}
 	
-	return count;
+	return str_buffer;
 }
 
 int print_pretty_row(char **col_names, int separator){
@@ -136,7 +141,7 @@ int print_pretty_row(char **col_names, int separator){
 	}
 
 	fprintf(out_ptr, "%s\n", vert_ch);
-	
+
 	if (separator)
 			print_pretty_bar(MID_BAR);
 

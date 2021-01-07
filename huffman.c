@@ -58,21 +58,6 @@ float find_avg_len(Code_Word *codewords){
 		return (num_sum) / denom;
 }
 
-//given a character returns string. user's responsibility to free
-char *convert_letter_to_str(char ch){
-	char *str_buffer;
-
-	if (ch == '\n'){
-		asprintf(&str_buffer, "\\n");
-	} else if (ch == '\t'){
-		asprintf(&str_buffer, "\\t");
-	} else {
-		asprintf(&str_buffer, "%c", ch);
-	}
-	
-	return str_buffer;
-}
-
 //given a decimal number and a num of bits, returns (str) binary number equivalent
 char *convert_dec_to_bin(unsigned decimal_n, unsigned n_bits){
 	int i;
