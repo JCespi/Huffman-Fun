@@ -126,6 +126,30 @@ char *convert_letter_to_str(char ch){
 	return str_buffer;
 }
 
+char *convert_dec_to_bin(unsigned decimal_n, unsigned n_bits){
+	int i;
+	unsigned bin_num[n_bits], j;
+	char *str_bin_num;
+
+	str_bin_num = calloc(n_bits + 1, sizeof(char));
+
+	//fill in the integer array "backwards"
+	for (i=0; decimal_n > 0; i++, decimal_n /= 2)
+		bin_num[i] = decimal_n % 2;
+	
+	//fill the rest of the array with 0's
+	for (; i < n_bits; i++)
+		bin_num[i] = 0;
+	
+	//fill the string representation
+	for (i=n_bits-1, j=0; i >= 0; i--, j++)
+		str_bin_num[j] = (bin_num[i]) ? '1' : '0';
+	
+	str_bin_num[n_bits] = '\0';
+	
+	return str_bin_num;
+}
+
 int print_pretty_row(char **col_names, int separator){
 	char *vert_ch;
 	int i;
@@ -178,6 +202,6 @@ int print_pretty_centered(char *str){
 	
 	pretty_row_helper(length_of_bar, str);
 	fprintf(out_ptr, "\n");
-	
+
 	return SUCCESS;
 }
