@@ -93,8 +93,8 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	fp = fopen("table.txt", "w");
 
 	//use approrpiate setup functions for table
-	n_cols = 4;
-	unsigned col_lens[] = {5, 5, 10, 5};
+	n_cols = 5;
+	unsigned col_lens[] = {8, 6, 10, 11, 7};
 	set_dump_file(fp);
 	set_col_lens(col_lens, n_cols);
 
@@ -102,7 +102,7 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 	fprintf(fp, "Average Length of codewords = %0.2f\n", find_avg_len(codewords));
 
 	//use table functions to print a title
-	char *col_titles[] = {"Letter", "Freq", "Codeword", "N_bits"};
+	char *col_titles[] = {"Letter", "Freq", "Code (2)", "Code (10)", "Nbits"};
 	print_pretty_header(col_titles);
 
 	//container to hold the strs to be passed to table.h function
@@ -115,10 +115,11 @@ void dump_input_info(Code_Word *codewords, unsigned *freq_table){
 			asprintf(&row_strs[0], "%d", i);
 			asprintf(&row_strs[1], "%d", freq_table[i]);
 			row_strs[2] = convert_dec_to_bin(codewords[i].code_d, codewords[i].n_bits);
-			 asprintf(&row_strs[3], "%d", codewords[i].n_bits);
+			asprintf(&row_strs[3], "%d", codewords[i].code_d);
+			asprintf(&row_strs[4], "%d", codewords[i].n_bits);
 
 			//print the string array using table.h
-			print_pretty_row(row_strs);
+			print_pretty_row(row_strs, 1);
 
 			//free the recently created strings
 			for (j=0; j < n_cols; j++)
