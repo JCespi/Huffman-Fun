@@ -21,18 +21,6 @@
  *      - add functions to find appropriate sizes for column widths
 */
 
-//start of a function to reduce magnitudes of frequencies (why though?)
-void squish_freqs(unsigned *freq_table){
-    unsigned small_freq, i;
-
-    small_freq = freq_table[0];
-    for (i=1; i < N_CHARS; i++)
-        if (freq_table[i] && freq_table[i] < small_freq)
-            small_freq = freq_table[i];
-    for (i=0; i < N_CHARS; i++)
-        freq_table[i] /= small_freq;
-}
-
 //a high bit followed by a byte signifies a leaf node with following letter
 void send_huff_tree(Heap_Node *root){
     if (is_leaf(root)){
