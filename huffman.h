@@ -33,8 +33,8 @@ Heap_Node *pop_min(Heap_Node *root);
 //finds the average length of the code
 float find_avg_len(Code_Word *codewords);
 
-//finds the maximum number of bits among codewords
-unsigned find_max_n_bits(Code_Word *codewords);
+//finds the maximum number of bits among codewords or maximum codeword
+unsigned find_max(Code_Word *codewords, int n_bits);
 
 //fills in root argument and returns array of codewords
 Code_Word *create_huffman_code(Heap_Node **root, float *freq_table);

@@ -61,20 +61,23 @@ float find_avg_len(Code_Word *codewords){
 		return (num_sum) / denom;
 }
 
-//finds the maximum number of bits among codewords
-unsigned find_max_n_bits(Code_Word *codewords){
-	unsigned i, max_n_bits;
+//finds the maximum number of bits among codewords or maximum codeword
+unsigned find_max(Code_Word *codewords, int n_bits){
+	unsigned i, max_value, competing_value;
 
 	if (!codewords)
 		return 0;
 
-	max_n_bits = codewords[0].n_bits;
+	max_value = (n_bits) ? codewords[0].n_bits : codewords[0].code_d;
 
-	for (i=1; i < N_CHARS; i++)
-		if (codewords[i].n_bits > max_n_bits)
-			max_n_bits = codewords[i].n_bits;
+	for (i=1; i < N_CHARS; i++){
+		competing_value = (n_bits) ? codewords[i].n_bits : codewords[i].code_d;
+
+		if (competing_value > max_value)
+			max_value = competing_value;
+	}
 	
-	return max_n_bits;
+	return max_value;
 }
 
 //=================Huffman-Construction=========================
