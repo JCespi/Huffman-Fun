@@ -78,7 +78,7 @@ void init_metadata(Code_Word *codewords, char **col_titles, unsigned *col_lens, 
 }
 
 //used to interface with functions in table.h to produce a table
-void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords){
+void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords, float comp){
 	unsigned n_cols, *col_lens;
 	char *str_buffer, **col_titles;
     Heap_Node *min_node;
@@ -99,7 +99,9 @@ void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords){
 	set_dump_file(fp);
 	set_col_lens(col_lens, n_cols);
 
-	//print the average length of a code
+	//print the average length of a code and the amount of compression
+    asprintf(&str_buffer, "Compression = %0.2f%%", comp);
+    print_pretty_centered(str_buffer);
 	asprintf(&str_buffer, "Average Length of codewords = %0.2f", find_avg_len(codewords));
 	print_pretty_centered(str_buffer);
     free(str_buffer);
@@ -136,18 +138,15 @@ void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords){
 }
 
 //=============================*code_Functions================================
-//reads chars from stdin, building a frequency table
-float *build_freq_table(void){
-    unsigned i, tot_n_chars;
-    float *freq_table;
-    char ch;
+//reads chars from stdin, building a frequency table. fills variable passed by reference
+unsigned build_freq_table(float *freq_table){
+    unsigned i, tot_n_chars, ch;
 
-    freq_table = calloc(N_CHARS, sizeof(float));
     tot_n_chars = 0;
 
     //receive characters from stdin
     while ((ch = getchar()) != EOF){
-        freq_table[(int)ch]++;
+        freq_table[ch]++;
         tot_n_chars++;
     }
     
@@ -155,48 +154,60 @@ float *build_freq_table(void){
     for (i=0; i < N_CHARS; i++)
         freq_table[i] = (freq_table[i] / tot_n_chars) * 100;
     
-    return freq_table;
+    //return the total number of bits in the input file
+    return tot_n_chars * BYTE;
 }
 
-//a high bit followed by a byte signifies a leaf node with following letter
-void send_huff_tree(Heap_Node *root){
+//computes amount of compression: original output / compressed output * 100
+float compute_compression(unsigned n_bits_in, unsigned n_bits_out){
+    return ((float)n_bits_in / (float)n_bits_out) * 100;
+}
+
+//a high bit followed by a byte signifies a leaf node with following letter.returns num of output bytes
+unsigned send_huff_tree(Heap_Node *root){
     if (is_leaf(root)){
         put_bits(BIT, ONE_BIT);
         put_bits(BYTE, root->letter);
+        return BIT + BYTE;
     } else {
         put_bits(BIT, ZERO_BIT);
-        send_huff_tree(root->left);
-        send_huff_tree(root->right);
+        return BIT + send_huff_tree(root->left) + send_huff_tree(root->right);
     }
 }
 
 //read file to form frequency table, generate huffman code and tree, send tree and codewords
 void encode(int dump, char *dmp_file){
+    unsigned n_bits_in, n_bits_out, ch;
     Code_Word *codewords;
     float *freq_table;
     Heap_Node *root;
-    char ch;
+
+    //initialize variables to compute compression
+    n_bits_in = n_bits_out = 0;
 
     //build the frequency table
-    freq_table = build_freq_table();
+    freq_table = calloc(N_CHARS, sizeof(float));
+    n_bits_in += build_freq_table(freq_table);
 
     //create the huffman code
     codewords = create_huffman_code(&root, freq_table);
 
     //send the huffman tree
-    send_huff_tree(root);
-
-    //dump the tree by eating the tree
-    if (dump)
-        dump_input_info(dmp_file, root, codewords);
+    n_bits_out += send_huff_tree(root);
 
     //rewind stdin and transmit the codewords
     rewind(stdin);
-    while ((ch = getchar()) != EOF)
-        put_bits(codewords[(int)ch].n_bits, codewords[(int)ch].code_d);
-
+    while ((ch = getchar()) != EOF){
+        put_bits(codewords[ch].n_bits, codewords[ch].code_d);
+        n_bits_out += codewords[ch].n_bits;
+    }
+        
     //flush any bits caught in buffer
-    flush_bits();
+    n_bits_out += flush_bits();
+
+    //dump the tree by performing breadth-first search
+    if (dump)
+        dump_input_info(dmp_file, root, codewords, compute_compression(n_bits_in, n_bits_out));
 
     //free the tree, the codeword table, and the frequency table
     free_huffman_tree(root);
