@@ -41,9 +41,10 @@ void put_bits (int n_bits, long code){
 }
 
 // Flush remaining bits to standard output
-void flush_bits (void){
+unsigned flush_bits (void){
 	if (n_extra_bits != 0)
 	    putchar(extra_bits << (CHAR_BIT - n_extra_bits));
+    return n_extra_bits;
 }
 
 // Return next code (#bits = NBITS) from input stream or EOF on end-of-file

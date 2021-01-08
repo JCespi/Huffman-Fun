@@ -23,7 +23,7 @@ void put_bits (int n_bits, long code);
 // padded with up to CHAR_BIT-1 zero bits.
 //
 
-void flush_bits (void);
+unsigned flush_bits (void);
 
 
 // Return an integer whose low-order bits are the next NBITS bits from a
