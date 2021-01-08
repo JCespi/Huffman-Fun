@@ -20,7 +20,7 @@ typedef struct code_word {
 	unsigned int code_d;		//codeword in decimal notation
 	unsigned int n_bits;		//num of bits and indicator of existence
 } Code_Word;
-
+//==============================================================
 //returns a node with the given parameters. user's responsibility to free
 Heap_Node *create_huff_node(char letter, float freq);
 
@@ -33,8 +33,12 @@ Heap_Node *pop_min(Heap_Node *root);
 //finds the average length of the code
 float find_avg_len(Code_Word *codewords);
 
+//finds the maximum number of bits among codewords
+unsigned find_max_n_bits(Code_Word *codewords);
+
 //fills in root argument and returns array of codewords
 Code_Word *create_huffman_code(Heap_Node **root, float *freq_table);
 
 //frees the huffman tree
 void free_huffman_tree(Heap_Node *root);
+//==============================================================

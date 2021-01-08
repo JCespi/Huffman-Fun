@@ -61,7 +61,21 @@ float find_avg_len(Code_Word *codewords){
 		return (num_sum) / denom;
 }
 
+//finds the maximum number of bits among codewords
+unsigned find_max_n_bits(Code_Word *codewords){
+	unsigned i, max_n_bits;
 
+	if (!codewords)
+		return 0;
+
+	max_n_bits = codewords[0].n_bits;
+
+	for (i=1; i < N_CHARS; i++)
+		if (codewords[i].n_bits > max_n_bits)
+			max_n_bits = codewords[i].n_bits;
+	
+	return max_n_bits;
+}
 
 //=================Huffman-Construction=========================
 Heap *create_and_build_heap(float *freq_table){
