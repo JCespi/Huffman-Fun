@@ -14,6 +14,7 @@
  * check for memory leaks by compiling on the zoo
  * add bit fields
  * add more detailed comments to header file functions. (@param, @return)
+ * generalize what we can huffman encode (like being able to pass a frequency array of anything/any size)
  * add error handling to main()
  * maybe make a main.c that has the main() that calls on encode and decode (defined in some .h)
  * for dumping the table:
@@ -67,10 +68,41 @@ void process_node(Heap_Node *node, Code_Word *codewords, unsigned n_cols){
     free(row_strs);
 }
 
+//frees a string array
+void free_str_container(char **container, int n){
+    int i;
+
+    for (i=0; i < n; i++)
+        free(container[i]);
+
+    free(container);
+}
+
+//initialize tile and column length arrays
+void init_metadata(Code_Word *codewords, char **col_titles, unsigned *col_lens, unsigned n_cols){
+    unsigned i, min_bit_col, min_dig_col, padding;
+
+    padding = 2; //(padding)
+    min_bit_col = find_max(codewords, 1) + padding;          //minimum size of columns that depend on bits
+    min_dig_col = get_n_digits(find_max(codewords, 0)) + padding; //min size of cols that depend on digits
+
+    //fill in column titles string array as well as the column lengths array
+    char *str_arr[] = {"Letter", "Freq (%)", "Code (2)", "Code (10)", "Nbits"};
+    for (i=0; i < n_cols; i++){
+        col_titles[i] = strdup(str_arr[i]);
+        col_lens[i]   = strlen(col_titles[i]) + padding;
+    }
+        
+   //update the column lengths that depend upon the data in those columns (choose larger value)
+    col_lens[2] = (min_bit_col > col_lens[2]) ? min_bit_col : col_lens[2];
+    col_lens[3] = (min_dig_col > col_lens[3]) ? min_dig_col : col_lens[3];
+    col_lens[4] = (min_bit_col > col_lens[4]) ? min_bit_col : col_lens[4];
+}
+
 //used to interface with functions in table.h to produce a table
 void dump_input_info(Heap_Node *root, Code_Word *codewords){
 	unsigned n_cols, *col_lens;
-	char *str_buffer;
+	char *str_buffer, **col_titles;
     Heap_Node *min_node;
     Queue *queue;
 	FILE *fp;
@@ -78,11 +110,12 @@ void dump_input_info(Heap_Node *root, Code_Word *codewords){
 	//open file to dump table to
 	fp = fopen("table.txt", "w");
 
-	//initialize the column lengths metadata
+	//initialize the column lengths metadata and str titles
 	n_cols = 5;
     col_lens = calloc(n_cols, sizeof(int));
-    col_lens[0]=8; col_lens[1]=10; col_lens[2]=10; col_lens[3]=11; col_lens[4] = 7;
-	
+    col_titles = malloc(sizeof(char*) * n_cols);
+    init_metadata(codewords, col_titles, col_lens, n_cols);
+
     //call on appropriate functions to set up the table
 	set_dump_file(fp);
 	set_col_lens(col_lens, n_cols);
@@ -90,10 +123,11 @@ void dump_input_info(Heap_Node *root, Code_Word *codewords){
 	//print the average length of a code
 	asprintf(&str_buffer, "Average Length of codewords = %0.2f", find_avg_len(codewords));
 	print_pretty_centered(str_buffer);
+    free(str_buffer);
 
 	//use table functions to print a title
-	char *col_titles[] = {"Letter", "Freq (%)", "Code (2)", "Code (10)", "Nbits"};
 	print_pretty_header(col_titles);
+    free_str_container(col_titles, n_cols);
 
     //perform a bfs and use table functions to print the rows in order of n_bits
     queue = create_queue();         //create queue
@@ -116,7 +150,6 @@ void dump_input_info(Heap_Node *root, Code_Word *codewords){
 
 	//free container(s)
     free_queue(queue);
-	free(str_buffer);
     free(col_lens);
 
 	//close dump file
