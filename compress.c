@@ -11,18 +11,7 @@
 #define BIT 1
 #define BYTE 8
 
-//a high bit followed by a byte signifies a leaf node with following letter
-void send_huff_tree(Heap_Node *root){
-    if (is_leaf(root)){
-        put_bits(BIT, ONE_BIT);
-        put_bits(BYTE, root->letter);
-    } else {
-        put_bits(BIT, ZERO_BIT);
-        send_huff_tree(root->left);
-        send_huff_tree(root->right);
-    }
-}
-
+//=============================Dump_Functions=================================
 //helper function that uses table print functions
 void process_node(Heap_Node *node, Code_Word *codewords, unsigned n_cols){
     unsigned i, code, n_bits;
@@ -146,6 +135,7 @@ void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords){
 	fclose(fp);
 }
 
+//=============================*code_Functions================================
 //reads chars from stdin, building a frequency table
 float *build_freq_table(void){
     unsigned i, tot_n_chars;
@@ -166,6 +156,18 @@ float *build_freq_table(void){
         freq_table[i] = (freq_table[i] / tot_n_chars) * 100;
     
     return freq_table;
+}
+
+//a high bit followed by a byte signifies a leaf node with following letter
+void send_huff_tree(Heap_Node *root){
+    if (is_leaf(root)){
+        put_bits(BIT, ONE_BIT);
+        put_bits(BYTE, root->letter);
+    } else {
+        put_bits(BIT, ZERO_BIT);
+        send_huff_tree(root->left);
+        send_huff_tree(root->right);
+    }
 }
 
 //read file to form frequency table, generate huffman code and tree, send tree and codewords
@@ -237,3 +239,4 @@ void decode(void){
 
     free_huffman_tree(root);
 }
+//============================================================================
