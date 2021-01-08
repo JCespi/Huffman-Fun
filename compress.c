@@ -158,9 +158,9 @@ unsigned build_freq_table(float *freq_table){
     return tot_n_chars * BYTE;
 }
 
-//computes amount of compression: original output / compressed output * 100
+//computes amount of compression b/w output stream and input stream
 float compute_compression(unsigned n_bits_in, unsigned n_bits_out){
-    return ((float)n_bits_in / (float)n_bits_out) * 100;
+    return (((float)n_bits_in - (float)n_bits_out) / (float)n_bits_in) * 100;
 }
 
 //a high bit followed by a byte signifies a leaf node with following letter.returns num of output bytes
