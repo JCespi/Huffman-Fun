@@ -32,11 +32,6 @@ int is_leaf(Heap_Node *node){
 	return !(node->left) && !(node->right);
 }
 
-//determines whether the node is an internal node
-int is_internal(Heap_Node *node){
-	return node->letter == INTERNAL_NODE_MARKER;
-}
-
 Heap_Node *pop_min(Heap_Node *root){
 	return NULL;
 }
@@ -65,6 +60,8 @@ float find_avg_len(Code_Word *codewords){
 	else
 		return (num_sum) / denom;
 }
+
+
 
 //=================Huffman-Construction=========================
 Heap *create_and_build_heap(float *freq_table){

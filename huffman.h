@@ -27,9 +27,6 @@ Heap_Node *create_huff_node(char letter, float freq);
 //determines whether the node has a letter/is a leaf
 int is_leaf(Heap_Node *node);
 
-//determines whether the node is an internal node
-int is_internal(Heap_Node *node);
-
 //returns the root and adjusts the tree. user's responsibility to free
 Heap_Node *pop_min(Heap_Node *root);
 
