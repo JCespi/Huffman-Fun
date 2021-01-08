@@ -10,6 +10,9 @@ char *convert_letter_to_str(char ch);
 //given a decimal number and a num of bits, returns (str) binary number equivalent
 char *convert_dec_to_bin(unsigned decimal_n, unsigned n_bits);
 
+//given an integer, returns the number of digits in that number
+unsigned get_n_digits(unsigned num);
+
 //returns 1 on success. 0 on failure
 int print_pretty_header(char **col_names);
 

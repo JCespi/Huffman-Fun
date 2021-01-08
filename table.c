@@ -153,6 +153,15 @@ char *convert_dec_to_bin(unsigned decimal_n, unsigned n_bits){
 	return str_bin_num;
 }
 
+unsigned get_n_digits(unsigned num){
+	int count;
+
+	for (count=0; num != 0; count++)
+		num = num / 10;
+	
+	return count;
+}
+
 int print_pretty_row(char **col_names, int separator){
 	char *vert_ch;
 	int i;
