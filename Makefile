@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -std=c99 -pedantic -Wall 
 DEPS = huffman.h heap.h transmit.h compress.h table.h queue.h
-OBJ = compress.o huffman.o heap.o transmit.o table.o queue.o
+OBJ = compress.o huffman.o heap.o transmit.o table.o queue.o main.o
 
 all: encode decode
 
