@@ -4,7 +4,7 @@
 #include "huffman.h"
 
 //Macros
-#define EFFICIENT 1
+#define EFFICIENT 1    //a macro that can be set to 0 to assign less frequent words shorter codes
 
 //=================Huffman-Specific_Node========================
 //comparator function to be used for heap creation and extraction
