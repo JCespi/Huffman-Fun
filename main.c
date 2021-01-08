@@ -12,13 +12,12 @@
  * add more detailed comments to header file functions. (@param, @return)
  * generalize what we can huffman encode (like being able to pass a frequency array of anything/any size)
  * add error handling to main()
- * maybe make a main.c that has the main() that calls on encode and decode (defined in some .h)
  * for dumping the table:
  *      - handle multiple sources of redirection with a default
 */
 
 int main(int argc, char **argv){
-    char *path, *exectuable;
+    char *path, *exectuable, *dmp_file;
     int i, dump;
     
     //get executable name
@@ -31,18 +30,21 @@ int main(int argc, char **argv){
 
         decode();
     } else {
-        dump = 0;   //default dump option is false
+        dump = 0;                //default dump option is false
+        dmp_file = "table.txt";  //default dump file
         i = 1;
 
         while (i < argc){
-            if (strcmp(argv[i], "-d") == 0){
+            if (strcmp(argv[i++], "-d") == 0){
                 dump = 1;
-                i++;
+
+                if (i < argc)
+                    dmp_file = argv[i++];
             } else 
                 DIE("%s", "encode: unknown flag");
         }
 
-        encode(dump);
+        encode(dump, dmp_file);
     }
 
     return 0;
