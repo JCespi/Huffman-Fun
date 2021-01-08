@@ -12,8 +12,7 @@
  * add more detailed comments to header file functions. (@param, @return)
  * generalize what we can huffman encode (like being able to pass a frequency array of anything/any size)
  * add error handling to main()
- * for dumping the table:
- *      - handle multiple sources of redirection with a default
+ * add bit error checks somehow
 */
 
 int main(int argc, char **argv){
