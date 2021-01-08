@@ -1,5 +1,8 @@
+//Author: Stanley Eisenstat, Date: (08/08/19)
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "transmit.h"
 
 // Information shared by putBits() and flushBits()
@@ -85,6 +88,6 @@ long get_bits (int n_bits){
     n_extra_bits -= n_bits;
     c = extra_bits >> n_extra_bits;
     extra_bits ^= c << n_extra_bits;
-    
+
     return (result << n_bits) | c;
 }
