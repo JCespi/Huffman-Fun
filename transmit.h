@@ -4,7 +4,8 @@
 //          with comments (slightly) re-worded, sporadic modification, 
 //          style changes, and heavy deletion.
 //        - Professor Eisenstat is the best CS professor I have ever had, and 
-//          his code's integration into my program is meant as a sort of homage.            
+//          his code's integration into my program is meant as a sort of homage to
+//          both his coding prowess as well as his positive influence on students.            
 
 // Maximum allowed value of NBITS
 #define NBITS_MAX (sizeof(long) * CHAR_BIT)
