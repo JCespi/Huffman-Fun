@@ -50,7 +50,7 @@ unsigned flush_bits (void){
 // Return next code (#bits = NBITS) from input stream or EOF on end-of-file
 long get_bits (int n_bits){
 	unsigned long max_code;
-	long result;
+	long c, result;
 
     if (n_bits <= 0 || NBITS_MAX < n_bits) {              // NBITS valid?
 		  fprintf (stderr, "invalid n_bits = %d\n", n_bits);
@@ -74,7 +74,6 @@ long get_bits (int n_bits){
     }
 
     // Read enough new bytes to have at least NBITS bits to extract code
-    long c;
     while (n_extra_bits < n_bits) {
       if ((c = getchar()) == EOF)                     // Too few bits?
         return EOF;
@@ -86,5 +85,6 @@ long get_bits (int n_bits){
     n_extra_bits -= n_bits;
     c = extra_bits >> n_extra_bits;
     extra_bits ^= c << n_extra_bits;
+    
     return (result << n_bits) | c;
 }
