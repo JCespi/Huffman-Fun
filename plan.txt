@@ -1,12 +1,3 @@
-Plan thus far:
-
-1. Write code to generate a huffman tree
-2. Write code to take a file and feed it to (1).
-3. Figure out how best to encode the tree itself
-4. Code up Stan's code to output bits (modified of course)
-5. Write code to decode the huffman tree and accept bit stream.
-6. Add error correction to the huffman code somehow.
-
 Bonus (Challenging)
 	1. Think of how to expand to more than char's. 
 		(such as groups of letters)
@@ -15,3 +6,5 @@ Accomplished:
 	- a heap data structure that can operate on any kind of node
 	- a huffman encoding procedure that uses the heap
 	- a way to store and send the codewords
+	- a way to send the tree itself
+	- sorting the table by n_bits in linear time
