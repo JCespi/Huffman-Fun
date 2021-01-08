@@ -7,13 +7,17 @@
 #include "table.h"
 #include "queue.h"
 
+//Macros
+#define BIT 1
+#define BYTE 8
+
 //a high bit followed by a byte signifies a leaf node with following letter
 void send_huff_tree(Heap_Node *root){
     if (is_leaf(root)){
-        put_bits(1, ONE_BIT);
-        put_bits(8, root->letter);
+        put_bits(BIT, ONE_BIT);
+        put_bits(BYTE, root->letter);
     } else {
-        put_bits(1, ZERO_BIT);
+        put_bits(BIT, ZERO_BIT);
         send_huff_tree(root->left);
         send_huff_tree(root->right);
     }
@@ -202,13 +206,13 @@ void encode(int dump, char *dmp_file){
 Heap_Node *receive_huff_tree(void){
     Heap_Node *root;
 
-    if (get_bits(1) == ZERO_BIT){   //internal node
+    if (get_bits(BIT) == ZERO_BIT){   //internal node
         root = create_huff_node(INTERNAL_NODE_MARKER, 0);
         root->left = receive_huff_tree();
         root->right = receive_huff_tree();
         return root;
     } else {                        //leaf node
-        return create_huff_node(get_bits(8), 0);
+        return create_huff_node(get_bits(BYTE), 0);
     }
 }
 
@@ -220,7 +224,7 @@ void decode(void){
     root = receive_huff_tree();
     ptr = root;
     
-    while ((bit = get_bits(1)) != EOF){
+    while ((bit = get_bits(BIT)) != EOF){
         //move the pointer appropriately
         ptr = (bit == ZERO_BIT) ? ptr->left : ptr->right;
 
