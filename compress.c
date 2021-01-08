@@ -8,18 +8,17 @@
 #include "queue.h"
 
 /* TO-DO
- * find a way to reduce the magnitudes of the frequencies (a percentage possibly)
+ * fix there being a little garbage that gets encoded
+ *          - if you don't rewind, you can see the garbage itself
+ *          - happened after making frequencies decimals and dedicating build_freq_table() to that
  * check for memory leaks by compiling on the zoo
  * add bit fields
  * add more detailed comments to header file functions. (@param, @return)
- * add function to find percentage of compression
  * add error handling to main()
  * maybe make a main.c that has the main() that calls on encode and decode (defined in some .h)
- * add a little function that prints a frequency plot
  * for dumping the table:
  *      - handle multiple sources of redirection with a default
  *      - add functions to find appropriate sizes for column widths
- *      - change stack memory to heap memory for column widths AND column titles
 */
 
 //start of a function to reduce magnitudes of frequencies (why though?)
