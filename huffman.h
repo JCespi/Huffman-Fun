@@ -9,8 +9,8 @@
 
 //a node in a huffman tree (N nodes total)
 typedef struct heap_node {
-	unsigned int letter;		//1  byte
-	unsigned int freq;		    //4  bytes
+	unsigned letter;		//1  byte
+	float freq;		    		//4  bytes
 	struct heap_node *left;		//8  bytes
 	struct heap_node *right;	//8  bytes
 } Heap_Node;					//21 bytes -> 21*N bytes total
@@ -22,7 +22,7 @@ typedef struct code_word {
 } Code_Word;
 
 //returns a node with the given parameters. user's responsibility to free
-Heap_Node *create_huff_node(char letter, unsigned int freq);
+Heap_Node *create_huff_node(char letter, float freq);
 
 //determines whether the node has a letter/is a leaf
 int is_leaf(Heap_Node *node);
@@ -37,7 +37,7 @@ Heap_Node *pop_min(Heap_Node *root);
 float find_avg_len(Code_Word *codewords);
 
 //fills in root argument and returns array of codewords
-Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table);
+Code_Word *create_huffman_code(Heap_Node **root, float *freq_table);
 
 //frees the huffman tree
 void free_huffman_tree(Heap_Node *root);

@@ -16,7 +16,7 @@ int comparator(const void *node1, const void *node2){
 }
 
 //returns a node with the given parameters. user's responsibility to free
-Heap_Node *create_huff_node(char letter, unsigned int freq){
+Heap_Node *create_huff_node(char letter, float freq){
 	Heap_Node *new_node;
 
 	new_node = malloc(sizeof(Heap_Node));
@@ -48,8 +48,8 @@ int code_exists(Code_Word codeword){
 
 //finds the average length of the code
 float find_avg_len(Code_Word *codewords){
-	unsigned i, num_sum, denom;
-	float avg_len;
+	unsigned i, denom;
+	float num_sum, avg_len;
 
 	avg_len = num_sum = denom = 0;
 
@@ -67,7 +67,7 @@ float find_avg_len(Code_Word *codewords){
 }
 
 //=================Huffman-Construction=========================
-Heap *create_and_build_heap(unsigned *freq_table){
+Heap *create_and_build_heap(float *freq_table){
 	Heap *min_heap;
 	int i, f, n_used_chars;
 
@@ -92,10 +92,10 @@ Heap *create_and_build_heap(unsigned *freq_table){
 	return min_heap;
 }
 
-Heap_Node *build_huffman_tree(unsigned *freq_table){
+Heap_Node *build_huffman_tree(float *freq_table){
 	Heap_Node *left_node, *top_node, *right_node, *root_node;
 	Heap *min_heap;
-	unsigned int combined_freq;
+	float combined_freq;
 
 	if ((min_heap = create_and_build_heap(freq_table)) == NULL)
 		return NULL;
@@ -169,7 +169,7 @@ unsigned int get_huff_tree_height(Heap_Node *root){
 	}
 }
 
-Code_Word *create_huffman_code(Heap_Node **root, unsigned *freq_table){
+Code_Word *create_huffman_code(Heap_Node **root, float *freq_table){
 	int *bit_buffer, b_index;
 	Code_Word *codewords;
 	Heap_Node *huff_tree;
