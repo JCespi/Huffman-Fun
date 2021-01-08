@@ -48,8 +48,9 @@ void send_huff_tree(Heap_Node *root){
 
 //helper function that uses table print functions
 void process_node(Heap_Node *node, Code_Word *codewords, unsigned n_cols){
-    unsigned i, freq, code, n_bits;
+    unsigned i, code, n_bits;
     char letter, **row_strs;
+    float freq;
 
     //container to hold the strs to be passed to table.h function
 	row_strs = malloc(sizeof(char*) * n_cols);
@@ -63,7 +64,7 @@ void process_node(Heap_Node *node, Code_Word *codewords, unsigned n_cols){
         
         //place data into buffer to use table function
         row_strs[0] = convert_letter_to_str(letter);
-        asprintf(&row_strs[1], "%d", freq);
+        asprintf(&row_strs[1], "%0.3f", freq);
         row_strs[2] = convert_dec_to_bin(code, n_bits);
         asprintf(&row_strs[3], "%d", code);
         asprintf(&row_strs[4], "%d", n_bits);
@@ -80,8 +81,8 @@ void process_node(Heap_Node *node, Code_Word *codewords, unsigned n_cols){
 }
 
 //used to interface with functions in table.h to produce a table
-void dump_input_info(Heap_Node *root, Code_Word *codewords, unsigned *freq_table){
-	unsigned n_cols;
+void dump_input_info(Heap_Node *root, Code_Word *codewords){
+	unsigned n_cols, *col_lens;
 	char *str_buffer;
     Heap_Node *min_node;
     Queue *queue;
@@ -90,9 +91,12 @@ void dump_input_info(Heap_Node *root, Code_Word *codewords, unsigned *freq_table
 	//open file to dump table to
 	fp = fopen("table.txt", "w");
 
-	//use approrpiate setup functions for table
+	//initialize the column lengths metadata
 	n_cols = 5;
-	unsigned col_lens[] = {8, 6, 10, 11, 7};
+    col_lens = calloc(n_cols, sizeof(int));
+    col_lens[0]=8; col_lens[1]=10; col_lens[2]=10; col_lens[3]=11; col_lens[4] = 7;
+	
+    //call on appropriate functions to set up the table
 	set_dump_file(fp);
 	set_col_lens(col_lens, n_cols);
 
@@ -101,7 +105,7 @@ void dump_input_info(Heap_Node *root, Code_Word *codewords, unsigned *freq_table
 	print_pretty_centered(str_buffer);
 
 	//use table functions to print a title
-	char *col_titles[] = {"Letter", "Freq", "Code (2)", "Code (10)", "Nbits"};
+	char *col_titles[] = {"Letter", "Freq (%)", "Code (2)", "Code (10)", "Nbits"};
 	print_pretty_header(col_titles);
 
     //perform a bfs and use table functions to print the rows in order of n_bits
@@ -126,22 +130,43 @@ void dump_input_info(Heap_Node *root, Code_Word *codewords, unsigned *freq_table
 	//free container(s)
     free_queue(queue);
 	free(str_buffer);
+    free(col_lens);
 
 	//close dump file
 	fclose(fp);
 }
 
+//reads chars from stdin, building a frequency table
+float *build_freq_table(void){
+    unsigned i, tot_n_chars;
+    float *freq_table;
+    char ch;
+
+    freq_table = calloc(N_CHARS, sizeof(float));
+    tot_n_chars = 0;
+
+    //receive characters from stdin
+    while ((ch = getchar()) != EOF){
+        freq_table[(int)ch]++;
+        tot_n_chars++;
+    }
+    
+    //update the frequencies to be percentages
+    for (i=0; i < N_CHARS; i++)
+        freq_table[i] = (freq_table[i] / tot_n_chars) * 100;
+    
+    return freq_table;
+}
+
 //read file to form frequency table, generate huffman code and tree, send tree and codewords
 void encode(int dump){
-    Heap_Node *root;
     Code_Word *codewords;
-    unsigned *freq_table, ch;
-
-    freq_table = calloc(N_CHARS, sizeof(int));
+    float *freq_table;
+    Heap_Node *root;
+    char ch;
 
     //build the frequency table
-    while ((ch = getchar()) != EOF)
-        freq_table[ch]++;
+    freq_table = build_freq_table();
 
     //create the huffman code
     codewords = create_huffman_code(&root, freq_table);
@@ -151,12 +176,12 @@ void encode(int dump){
 
     //dump the tree by eating the tree
     if (dump)
-        dump_input_info(root, codewords, freq_table);
+        dump_input_info(root, codewords);
 
     //rewind stdin and transmit the codewords
     rewind(stdin);
     while ((ch = getchar()) != EOF)
-        put_bits(codewords[ch].n_bits, codewords[ch].code_d);
+        put_bits(codewords[(int)ch].n_bits, codewords[(int)ch].code_d);
 
     //flush any bits caught in buffer
     flush_bits();
