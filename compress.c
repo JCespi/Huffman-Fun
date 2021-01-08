@@ -85,7 +85,7 @@ void init_metadata(Code_Word *codewords, char **col_titles, unsigned *col_lens, 
 }
 
 //used to interface with functions in table.h to produce a table
-void dump_input_info(Heap_Node *root, Code_Word *codewords){
+void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords){
 	unsigned n_cols, *col_lens;
 	char *str_buffer, **col_titles;
     Heap_Node *min_node;
@@ -93,7 +93,8 @@ void dump_input_info(Heap_Node *root, Code_Word *codewords){
 	FILE *fp;
 
 	//open file to dump table to
-	fp = fopen("table.txt", "w");
+	if (!(fp = fopen(dmp_file, "w")))
+        return;
 
 	//initialize the column lengths metadata and str titles
 	n_cols = 5;
@@ -164,7 +165,7 @@ float *build_freq_table(void){
 }
 
 //read file to form frequency table, generate huffman code and tree, send tree and codewords
-void encode(int dump){
+void encode(int dump, char *dmp_file){
     Code_Word *codewords;
     float *freq_table;
     Heap_Node *root;
@@ -181,7 +182,7 @@ void encode(int dump){
 
     //dump the tree by eating the tree
     if (dump)
-        dump_input_info(root, codewords);
+        dump_input_info(dmp_file, root, codewords);
 
     //rewind stdin and transmit the codewords
     rewind(stdin);
