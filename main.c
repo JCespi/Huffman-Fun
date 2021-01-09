@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include "compress.h"
 
+//Macros
+#define DIE(format, ...) fprintf(stderr, format "\n", __VA_ARGS__), exit(EXIT_FAILURE)
+
 /* TO-DO
  * fix there being a little garbage that gets encoded
  *          - if you don't rewind, you can see the garbage itself
