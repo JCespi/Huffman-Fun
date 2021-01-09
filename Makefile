@@ -5,7 +5,7 @@ DEPS = compress.h \
 	   ./Data_Structs/Heap/heap.h \
 	   ./Data_Structs/Queue/queue.h \
 	   ./Transmit/transmit.h \
-	   ./Table/table.o
+	   ./Table/table.h
 OBJS = ./main.o \
 	   ./compress.o \
        ./Huffman/huffman.o \
