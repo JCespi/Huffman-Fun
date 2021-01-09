@@ -11,7 +11,6 @@
  *          - if you don't rewind, you can see the garbage itself
  *          - happened after making frequencies decimals and dedicating build_freq_table() to that
  *          - there appears to be some trouble transmitting a newline char with putbits()
- * check for memory leaks by compiling on the zoo
  * add bit fields
  * add more detailed comments to header file functions. (@param, @return)
  * generalize what we can huffman encode (like being able to pass a frequency array of anything/any size)
