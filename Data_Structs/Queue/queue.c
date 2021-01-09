@@ -49,6 +49,7 @@ void enqueue(Queue *queue, void *key){
 
 void *dequeue(Queue *queue){
     Q_Node *front_node;
+    void *key;
 
     if (!queue || is_empty(queue))
         return NULL;
@@ -60,10 +61,11 @@ void *dequeue(Queue *queue){
     if (!queue->front)
         queue->rear = NULL;
 
-    //free the old front of the queue
+    //save info and free the old front of the queue
+    key = front_node->key;
     free(front_node);
     
-    return front_node->key;
+    return key;
 }
 
 void free_queue(Queue *queue){
