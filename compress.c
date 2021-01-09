@@ -102,6 +102,7 @@ void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords, floa
 	//print the average length of a code and the amount of compression
     asprintf(&str_buffer, "Compression = %0.2f%%", comp);
     print_pretty_centered(str_buffer);
+    free(str_buffer);
 	asprintf(&str_buffer, "Average Length of codewords = %0.2f", find_avg_len(codewords));
 	print_pretty_centered(str_buffer);
     free(str_buffer);
