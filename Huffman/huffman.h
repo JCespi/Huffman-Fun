@@ -1,5 +1,5 @@
 //API for creating a Huffman code; Jeacy Espinoza
-#include "heap.h"
+#include "../Data_Structs/Heap/heap.h"
 
 //available macros
 #define INTERNAL_NODE_MARKER '$'

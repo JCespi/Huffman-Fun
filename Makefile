@@ -1,14 +1,30 @@
 CC = gcc
 CFLAGS = -std=c99 -pedantic -Wall 
-DEPS = huffman.h heap.h transmit.h compress.h table.h queue.h
-OBJ = compress.o huffman.o heap.o transmit.o table.o queue.o main.o
+DEPS = compress.h \
+	   ./Huffman/huffman.h \
+	   ./Data_Structs/Heap/heap.h \
+	   ./Data_Structs/Queue/queue.h \
+	   ./Transmit/transmit.h \
+	   ./Table/table.o
+OBJS = ./main.o \
+	   ./compress.o \
+       ./Huffman/huffman.o \
+	   ./Data_Structs/Heap/heap.o \
+	   ./Data_Structs/Queue/queue.o \
+	   ./Transmit/transmit.o \
+	   ./Table/table.o
 
 all: encode decode
+
+sub_folders: +$(MAKE) -C Data_Structs \
+	 		 +$(MAKE) -C Huffman \
+	 		 +$(MAKE) -C Table \
+	 		 +$(MAKE) -C Transmit
 
 %.o: %.c $(DEPS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-encode: $(OBJ)
+encode: $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 
 decode: encode
