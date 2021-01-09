@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "huffman.h"
+#include "../Data_Structs/Heap/heap.h"
 
 //Macros
 #define EFFICIENT 1    //a macro that can be set to 0 to assign less frequent words shorter codes
