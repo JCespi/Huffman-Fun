@@ -13,6 +13,7 @@ OBJS = ./main.o 			        \
 	   ./Data_Structs/Queue/queue.o \
 	   ./Transmit/transmit.o 		\
 	   ./Table/table.o
+MFLAGS = clean
 
 all: encode decode
 
@@ -32,3 +33,7 @@ decode: encode
 
 clean:
 	rm -f encode decode *.o
+	cd Data_Structs && $(MAKE) $(MFLAGS)
+	cd Huffman 		&& $(MAKE) $(MFLAGS)
+	cd Table 		&& $(MAKE) $(MFLAGS)
+	cd Transmit 	&& $(MAKE) $(MFLAGS)
