@@ -17,6 +17,19 @@ Queue *create_queue(void){
     return queue;
 }
 
+unsigned len(Queue *queue){
+    if (!queue)
+        return 0;
+
+    return queue->len;
+}
+
+unsigned is_empty(Queue *queue){
+    if (!queue)
+        return 1;
+    return len(queue) == 0;
+}
+
 void enqueue(Queue *queue, void *key){
     Q_Node *new;
 
@@ -37,7 +50,7 @@ void enqueue(Queue *queue, void *key){
 void *dequeue(Queue *queue){
     Q_Node *front_node;
 
-    if (!queue)
+    if (!queue || is_empty(queue))
         return NULL;
     
     front_node = queue->front;
@@ -51,19 +64,6 @@ void *dequeue(Queue *queue){
     free(front_node);
     
     return front_node->key;
-}
-
-unsigned len(Queue *queue){
-    if (!queue)
-        return 0;
-
-    return queue->len;
-}
-
-unsigned is_empty(Queue *queue){
-    if (!queue)
-        return 1;
-    return queue->len == 0;
 }
 
 void free_queue(Queue *queue){
