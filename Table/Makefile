@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -pedantic -Wall
+CFLAGS = -std=c99 -pedantic -Wall -g3
 DEPS = table.h
 OBJS = table.o
 
