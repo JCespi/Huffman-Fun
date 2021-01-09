@@ -46,6 +46,9 @@ void *dequeue(Queue *queue){
 
     if (!queue->front)
         queue->rear = NULL;
+
+    //free the old front of the queue
+    free(front_node);
     
     return front_node->key;
 }
