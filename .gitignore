@@ -7,3 +7,6 @@ decode
 
 #Ignore file that contains dumped info
 table.txt
+
+#Ignore log
+log
