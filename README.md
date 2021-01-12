@@ -1,10 +1,12 @@
 # Huffman Coding
 
-A compression program that uses huffman coding to assign codewords to characters supplied from stdin.
+A compression program that uses huffman encoding to assign codewords to characters supplied from stdin and huffman decoding
+to output the corresponding characters to stdout given codewords.
 
 Upon typing **make**, two executables are created: **encode** and **decode**. Here is their usage:
 
 ```encode [-d] [dump_file]```
+
 ```decode```
 
 where the *-d* option dumps the average length of a codeword and the achieved 
