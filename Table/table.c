@@ -11,9 +11,9 @@
 #define SUCCESS 1
 
 //Global variables
-FILE *out_ptr = NULL;	 //where to direct stdout
-unsigned n_cols = 0; 	 //the number of columns
-unsigned *col_lens;  	 //array containing column widths
+static FILE *out_ptr = NULL;	 //where to direct stdout
+static unsigned n_cols = 0; 	 //the number of columns
+static unsigned *col_lens;  	 //array containing column widths
 
 void set_dump_file(FILE *fp){
 	out_ptr = fp;
