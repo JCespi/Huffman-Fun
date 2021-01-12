@@ -4,6 +4,6 @@ A compression program that uses huffman coding to assign codewords to characters
 
 Upon typing **make**, two executables are created: **encode** and **decode**. Here is their usage:
 
-encode [-d] [dump_file]
+```encode [-d] [dump_file]```
 
-decode
+```decode```
