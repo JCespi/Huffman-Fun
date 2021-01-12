@@ -21,3 +21,4 @@ Receiver:```cat compressed | ./decode > original```
 
 Here is a look at the dumped table:
 
+![Screenshot](https://github.com/JCespi/Huffman-Fun/blob/master/table_pic.png)
