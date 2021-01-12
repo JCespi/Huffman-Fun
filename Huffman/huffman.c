@@ -33,10 +33,6 @@ int is_leaf(Heap_Node *node){
 	return !(node->left) && !(node->right);
 }
 
-Heap_Node *pop_min(Heap_Node *root){
-	return NULL;
-}
-
 //=================Huffman-Related_Info=========================
 int code_exists(Code_Word codeword){
 	return codeword.n_bits != 0;
