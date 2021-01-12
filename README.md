@@ -14,3 +14,10 @@ compression followed by a table displaying each letter's frequency and associate
 The default dump file is created in the current directory and is called *table.txt*.
 
 Below is an example of how to use the two executables, as well as the generated output.
+
+Sender  :```./encode -d < sample.txt > compressed```
+
+Receiver:```cat compressed | ./decode > original```
+
+Here is a look at the dumped table:
+
