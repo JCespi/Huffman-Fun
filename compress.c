@@ -9,11 +9,12 @@
 #include "Data_Structs/Queue/queue.h"
 
 //Macros
-#define BIT 1      //size of a bit  (in bits)
-#define BYTE 8     //size of a byte (in bits)
-#define INTERNAL 0 //signifies an internal node
-#define LEAF     1 //signifies a leaf node
-#define EOC 256    //signifies a 256th character that signals an end to transmission
+#define BIT      1  //size of a bit  (in bits)
+#define BYTE     8  //size of a byte (in bits)
+#define LEAF     1  //signifies a leaf node
+#define INTERNAL 0  //signifies an internal node
+#define N_CHARS 256 //the number of characters (0 - 255)
+#define EOC     256 //signifies a 256th character that signals an end to transmission
 
 //=============================Dump_Functions=================================
 //helper function that uses table print functions
@@ -277,8 +278,8 @@ void decode(void){
     ptr = root;
     
     while ((bit = get_bits(BIT)) != EOF){
-        //move the pointer appropriately
-        ptr = (bit == ZERO_BIT) ? ptr->left : ptr->right;
+        //move the pointer appropriately according to bit received (0->left, 1->right)
+        ptr = (bit == 0) ? ptr->left : ptr->right;
 
         //a leaf node (a letter or EOC) found
         if (is_leaf(ptr)){
