@@ -144,31 +144,34 @@ void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords, floa
 
 //=============================*code_Functions================================
 //reads chars from stdin, building a frequency table. fills variable passed by reference
-unsigned build_freq_table(float *freq_table, unsigned table_size){
+unsigned build_freq_table(float **freq_table, unsigned table_size){
     unsigned i, tot_n_chars, ch;
-    float smallest_freq;
+    float smallest_freq, *output_arr;
 
     tot_n_chars = 0;
     smallest_freq = 100.0;
 
+    *freq_table = calloc(table_size, sizeof(float));
+    output_arr = *freq_table;
+
     //receive characters from stdin
     while ((ch = getchar()) != EOF){
-        freq_table[ch]++;
+        output_arr[ch]++;
         tot_n_chars++;
     }
     
     //update the frequencies to be percentages
     for (i=0; i < table_size; i++){
-        if (freq_table[i]){
-            freq_table[i] = (freq_table[i] / tot_n_chars) * 100;
+        if (output_arr[i]){
+            output_arr[i] = (output_arr[i] / tot_n_chars) * 100;
 
-            if (freq_table[i] < smallest_freq)
-                smallest_freq = freq_table[i];
+            if (output_arr[i] < smallest_freq)
+                smallest_freq = output_arr[i];
         }
     }
 
     //add the special "EOF" character to the table with the smallest frequency
-    freq_table[EOC] = smallest_freq;
+    output_arr[EOC] = smallest_freq;
         
     //return the total number of bits in the input file
     return tot_n_chars * BYTE;
@@ -216,8 +219,7 @@ void encode(int dump, char *dmp_file){
 
     //build the frequency table
     table_size = N_CHARS + 1;
-    freq_table = calloc(table_size, sizeof(float));
-    n_bits_in += build_freq_table(freq_table, table_size);
+    n_bits_in += build_freq_table(&freq_table, table_size);
     
     //create the huffman code
     codewords = create_huffman_code(&root, freq_table, table_size);
@@ -225,9 +227,10 @@ void encode(int dump, char *dmp_file){
     //send the huffman tree
     n_bits_out += send_huff_tree(root);
 
-    //rewind stdin and transmit the codewords
+    //rewind stdin
     rewind(stdin);
-    
+
+    //transmit the codewords
     while ((ch = getchar()) != EOF)
         n_bits_out += send_codeword(&codewords[ch]);
     
@@ -256,7 +259,7 @@ Heap_Node *receive_huff_tree(void){
         root->left = receive_huff_tree();
         root->right = receive_huff_tree();
         return root;
-    } else {                        //leaf node
+    } else {                          //leaf node
         if (get_bits(BIT))
             return create_huff_node(EOC, 0);
         else
@@ -269,6 +272,7 @@ void decode(void){
     Heap_Node *root, *ptr;
     long bit;
 
+    //receive the tree from stdin
     root = receive_huff_tree();
     ptr = root;
     
@@ -276,7 +280,7 @@ void decode(void){
         //move the pointer appropriately
         ptr = (bit == ZERO_BIT) ? ptr->left : ptr->right;
 
-        //a leaf node (a letter) found
+        //a leaf node (a letter or EOC) found
         if (is_leaf(ptr)){
             if (ptr->letter == EOC)
                 break;
@@ -286,6 +290,7 @@ void decode(void){
         }
     }
 
+    //free the tree
     free_huffman_tree(root);
 }
 //============================================================================
