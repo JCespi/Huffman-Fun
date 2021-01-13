@@ -143,7 +143,7 @@ void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords, floa
 	fclose(fp);
 }
 
-//=============================*code_Functions================================
+//=============================Encode_Functions================================
 //reads chars from stdin, building a frequency table. fills variable passed by reference
 unsigned build_freq_table(float **freq_table, unsigned table_size){
     unsigned i, tot_n_chars, ch;
@@ -251,6 +251,7 @@ void encode(int dump, char *dmp_file){
     free(codewords);
 }
 
+//=============================Decode_Functions================================
 //receives stream of bits sent from encode() to construct tree
 Heap_Node *receive_huff_tree(void){
     Heap_Node *root;
