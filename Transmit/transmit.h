@@ -26,7 +26,7 @@ void put_bits(int n_bits, long code);
 
 /* Flushes out any remaining bits in the buffer with up to 7 zero bits of padding.
  * */
-unsigned flush_bits(void);
+void flush_bits(void);
 
 
 

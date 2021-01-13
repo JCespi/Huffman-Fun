@@ -239,7 +239,7 @@ void encode(int dump, char *dmp_file){
     n_bits_out += send_codeword(&codewords[EOC]);
         
     //flush any bits caught in buffer
-    n_bits_out += flush_bits();
+    flush_bits();
 
     //dump the tree by performing breadth-first search
     if (dump)
