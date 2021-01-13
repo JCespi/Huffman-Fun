@@ -7,13 +7,8 @@
 #define DIE(format, ...) fprintf(stderr, format "\n", __VA_ARGS__), exit(EXIT_FAILURE)
 
 /* TO-DO
- * fix there being a little garbage that gets encoded
- *          - if you don't rewind, you can see the garbage itself
- *          - happened after making frequencies decimals and dedicating build_freq_table() to that
- *          - there appears to be some trouble transmitting a newline char with putbits()
  * add bit fields
  * add more detailed comments to header file functions. (@param, @return)
- * generalize what we can huffman encode (like being able to pass a frequency array of anything/any size)
  * add error handling to main()
  * add bit error checks somehow
 */
