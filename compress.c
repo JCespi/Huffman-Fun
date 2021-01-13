@@ -9,8 +9,8 @@
 #include "Data_Structs/Queue/queue.h"
 
 //Macros
-#define BIT 1
-#define BYTE 8
+#define BIT 1      //size of a bit  (in bits)
+#define BYTE 8     //size of a byte (in bits)
 #define INTERNAL 0 //signifies an internal node
 #define LEAF     1 //signifies a leaf node
 #define EOC 256    //signifies a 256th character that signals an end to transmission
@@ -198,6 +198,12 @@ unsigned send_huff_tree(Heap_Node *root){
     }
 }
 
+//given a char, put_bits() the char and returns num of written bits
+unsigned send_codeword(Code_Word *codeword){
+    put_bits(codeword->n_bits, codeword->code_d);
+    return codeword->n_bits;
+}
+
 //read file to form frequency table, generate huffman code and tree, send tree and codewords
 void encode(int dump, char *dmp_file){
     unsigned n_bits_in, n_bits_out, ch, table_size;
@@ -221,13 +227,12 @@ void encode(int dump, char *dmp_file){
 
     //rewind stdin and transmit the codewords
     rewind(stdin);
-    while ((ch = getchar()) != EOF){
-        put_bits(codewords[ch].n_bits, codewords[ch].code_d);
-        n_bits_out += codewords[ch].n_bits;
-    }
-
+    
+    while ((ch = getchar()) != EOF)
+        n_bits_out += send_codeword(&codewords[ch]);
+    
     //output the codeword that signals the end
-    put_bits(codewords[EOC].n_bits, codewords[EOC].code_d);
+    n_bits_out += send_codeword(&codewords[EOC]);
         
     //flush any bits caught in buffer
     n_bits_out += flush_bits();
