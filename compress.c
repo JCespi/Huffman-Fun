@@ -3,9 +3,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include "compress.h"
+#include "Table/table.h"
 #include "Huffman/huffman.h"
 #include "Transmit/transmit.h"
-#include "Table/table.h"
 #include "Data_Structs/Queue/queue.h"
 
 //Macros
