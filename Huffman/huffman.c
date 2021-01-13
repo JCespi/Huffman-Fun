@@ -40,7 +40,7 @@ int code_exists(Code_Word codeword){
 	return codeword.n_bits != 0;
 }
 
-//finds the average length of the code
+//finds the average length of the code (only chars)
 float find_avg_len(Code_Word *codewords, unsigned table_size){
 	unsigned i, denom;
 	float num_sum, avg_len;
@@ -48,7 +48,7 @@ float find_avg_len(Code_Word *codewords, unsigned table_size){
 	avg_len = num_sum = denom = 0;
 
 	//find the number of characters
-	for (i = 0; i < table_size; i++)
+	for (i = 0; i < table_size - 1; i++)
 		if (code_exists(codewords[i])){
 			num_sum += codewords[i].n_bits;
 			denom++;
