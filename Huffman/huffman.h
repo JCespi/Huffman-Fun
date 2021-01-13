@@ -21,22 +21,19 @@ typedef struct code_word {
 } Code_Word;
 //==============================================================
 //returns a node with the given parameters. user's responsibility to free
-Heap_Node *create_huff_node(char letter, float freq);
+Heap_Node *create_huff_node(unsigned letter, float freq);
 
 //determines whether the node has a letter/is a leaf
 int is_leaf(Heap_Node *node);
 
-//returns the root and adjusts the tree. user's responsibility to free
-Heap_Node *pop_min(Heap_Node *root);
-
 //finds the average length of the code
-float find_avg_len(Code_Word *codewords);
+float find_avg_len(Code_Word *codewords, unsigned table_size);
 
 //finds the maximum number of bits among codewords or maximum codeword
-unsigned find_max(Code_Word *codewords, int n_bits);
+unsigned find_max(Code_Word *codewords, unsigned table_size, int n_bits);
 
 //fills in root argument and returns array of codewords
-Code_Word *create_huffman_code(Heap_Node **root, float *freq_table);
+Code_Word *create_huffman_code(Heap_Node **root, float *freq_table, unsigned table_size);
 
 //frees the huffman tree
 void free_huffman_tree(Heap_Node *root);
