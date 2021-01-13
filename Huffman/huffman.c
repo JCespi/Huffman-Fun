@@ -6,6 +6,8 @@
 
 //Macros
 #define EFFICIENT 1    //a macro that can be set to 0 to assign less frequent words shorter codes
+#define ZERO_BIT  0	   //bit assigned to left tree edges
+#define ONE_BIT   1    //bit assigned to right tree edges
 
 //=================Huffman-Specific_Node========================
 //comparator function to be used for heap creation and extraction
