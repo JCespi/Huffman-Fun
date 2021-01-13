@@ -62,12 +62,12 @@ void free_str_container(char **container, int n){
 }
 
 //initialize tile and column length arrays
-void init_metadata(Code_Word *codewords, char **col_titles, unsigned *col_lens, unsigned n_cols, unsigned n){
+void init_metadata(Code_Word *codewords, char **col_titles, unsigned *col_lens, unsigned n_cols){
     unsigned i, min_bit_col, min_dig_col, padding;
 
     padding = 2; //(padding)
-    min_bit_col = find_max(codewords, n, 1) + padding;          //minimum size of columns that depend on bits
-    min_dig_col = get_n_digits(find_max(codewords, n, 0)) + padding; //min size of cols that depend on digits
+    min_bit_col = find_max(codewords, 1) + padding;          //minimum size of columns that depend on bits
+    min_dig_col = get_n_digits(find_max(codewords, 0)) + padding; //min size of cols that depend on digits
 
     //fill in column titles string array as well as the column lengths array
     char *str_arr[] = {"Letter", "Freq (%)", "Code (2)", "Code (10)", "Nbits"};
@@ -83,7 +83,7 @@ void init_metadata(Code_Word *codewords, char **col_titles, unsigned *col_lens, 
 }
 
 //used to interface with functions in table.h to produce a table
-void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords, float comp, unsigned n){
+void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords, float comp){
 	unsigned n_cols, *col_lens;
 	char *str_buffer, **col_titles;
     Heap_Node *min_node;
@@ -98,7 +98,7 @@ void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords, floa
 	n_cols = 5;
     col_lens = calloc(n_cols, sizeof(int));
     col_titles = malloc(sizeof(char*) * n_cols);
-    init_metadata(codewords, col_titles, col_lens, n_cols, n);
+    init_metadata(codewords, col_titles, col_lens, n_cols);
 
     //call on appropriate functions to set up the table
 	set_dump_file(fp);
@@ -108,7 +108,7 @@ void dump_input_info(char *dmp_file, Heap_Node *root, Code_Word *codewords, floa
     asprintf(&str_buffer, "Compression = %0.2f%%", comp);
     print_pretty_centered(str_buffer);
     free(str_buffer);
-	asprintf(&str_buffer, "Average Length of codewords = %0.2f", find_avg_len(codewords, n));
+	asprintf(&str_buffer, "Average Length of codewords = %0.2f", find_avg_len(codewords));
 	print_pretty_centered(str_buffer);
     free(str_buffer);
 
@@ -243,7 +243,7 @@ void encode(int dump, char *dmp_file){
 
     //dump the tree by performing breadth-first search
     if (dump)
-        dump_input_info(dmp_file, root, codewords, compute_compression(n_bits_in, n_bits_out), table_size);
+        dump_input_info(dmp_file, root, codewords, compute_compression(n_bits_in, n_bits_out));
 
     //free the tree, the codeword table, and the frequency table
     free_huffman_tree(root);
