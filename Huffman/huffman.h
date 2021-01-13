@@ -24,10 +24,10 @@ Heap_Node *create_huff_node(unsigned letter, float freq);
 int is_leaf(Heap_Node *node);
 
 //finds the average length of the code
-float find_avg_len(Code_Word *codewords, unsigned table_size);
+float find_avg_len(Code_Word *codewords);
 
 //finds the maximum number of bits among codewords or maximum codeword
-unsigned find_max(Code_Word *codewords, unsigned table_size, int n_bits);
+unsigned find_max(Code_Word *codewords, int n_bits);
 
 //fills in root argument and returns array of codewords
 Code_Word *create_huffman_code(Heap_Node **root, float *freq_table, unsigned table_size);

@@ -9,6 +9,9 @@
 #define ZERO_BIT  0	   //bit assigned to left tree edges
 #define ONE_BIT   1    //bit assigned to right tree edges
 
+//Static variable
+static unsigned table_size = 0;	//size of codeword and frequency arrays
+
 //=================Huffman-Specific_Node========================
 //comparator function to be used for heap creation and extraction
 int comparator(const void *node1, const void *node2){
@@ -41,7 +44,7 @@ int code_exists(Code_Word codeword){
 }
 
 //finds the average length of the code (only chars)
-float find_avg_len(Code_Word *codewords, unsigned table_size){
+float find_avg_len(Code_Word *codewords){
 	unsigned i, denom;
 	float num_sum, avg_len;
 
@@ -61,7 +64,7 @@ float find_avg_len(Code_Word *codewords, unsigned table_size){
 }
 
 //finds the maximum number of bits among codewords or maximum codeword
-unsigned find_max(Code_Word *codewords, unsigned table_size, int n_bits){
+unsigned find_max(Code_Word *codewords, int n_bits){
 	unsigned i, max_value, competing_value;
 
 	if (!codewords)
@@ -80,7 +83,7 @@ unsigned find_max(Code_Word *codewords, unsigned table_size, int n_bits){
 }
 
 //=================Huffman-Construction=========================
-Heap *create_and_build_heap(float *freq_table, unsigned table_size){
+Heap *create_and_build_heap(float *freq_table){
 	Heap *min_heap;
 	int i, f, n_used_chars;
 
@@ -105,12 +108,12 @@ Heap *create_and_build_heap(float *freq_table, unsigned table_size){
 	return min_heap;
 }
 
-Heap_Node *build_huffman_tree(float *freq_table, unsigned table_size){
+Heap_Node *build_huffman_tree(float *freq_table){
 	Heap_Node *left_node, *top_node, *right_node, *root_node;
 	Heap *min_heap;
 	float combined_freq;
 
-	if ((min_heap = create_and_build_heap(freq_table, table_size)) == NULL)
+	if ((min_heap = create_and_build_heap(freq_table)) == NULL)
 		return NULL;
 
 	while (!has_one_element(min_heap)){
@@ -182,13 +185,16 @@ unsigned int get_huff_tree_height(Heap_Node *root){
 	}
 }
 
-Code_Word *create_huffman_code(Heap_Node **root, float *freq_table, unsigned table_size){
-	int *bit_buffer, b_index;
+Code_Word *create_huffman_code(Heap_Node **root, float *freq_table, unsigned n_items){
 	Code_Word *codewords;
 	Heap_Node *huff_tree;
+	int *bit_buffer;
+
+	//set the static variable table_size to the given 
+	table_size = n_items;
 
 	//generate the huffman tree and save its root to argument
-	if ((huff_tree = build_huffman_tree(freq_table, table_size)) == NULL)
+	if ((huff_tree = build_huffman_tree(freq_table)) == NULL)
 		return NULL;
 
 	*root = huff_tree;
@@ -196,10 +202,9 @@ Code_Word *create_huffman_code(Heap_Node **root, float *freq_table, unsigned tab
 	//initialize the bit buffer and the array of code word structs
 	bit_buffer = calloc(get_huff_tree_height(huff_tree), sizeof(int));
 	codewords  = calloc(table_size, sizeof(Code_Word));
-	b_index = 0;
 
 	//fill in the array of code word structs
-	assign_codes(huff_tree, bit_buffer, b_index, codewords);
+	assign_codes(huff_tree, bit_buffer, 0, codewords);
 	
 	//free the buffer used to store bits
 	free(bit_buffer);
