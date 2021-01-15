@@ -6,13 +6,7 @@
 //Macros
 #define DIE(format, ...) fprintf(stderr, format "\n", __VA_ARGS__), exit(EXIT_FAILURE)
 
-/* TO-DO
- * add bit fields
- * add more detailed comments to header file functions. (@param, @return)
- * add error handling to main()
- * add bit error checks somehow
-*/
-
+//an example driver that appropriately calls on encode() or decode().
 int main(int argc, char **argv){
     char *path, *exectuable, *dmp_file;
     int i, dump;
