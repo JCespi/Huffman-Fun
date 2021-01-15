@@ -3,6 +3,8 @@
 A compression program that uses huffman encoding to assign codewords to characters supplied from stdin and huffman decoding
 to output the corresponding characters to stdout given codewords.
 
+*Note that main.c contains a simple driver that appropriately calls on the encode() and decode() functions stated in compress.h and defined in compress.c. The two functions are provided in compress.h so as to allow experimentation without having to look at any of the (many) auxiliary functions in compress.c.*
+
 Upon typing **make**, two executables are created: **encode** and **decode**. Here is their usage:
 
 ```encode [-d] [dump_file]```
